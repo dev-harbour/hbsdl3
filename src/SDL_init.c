@@ -52,7 +52,7 @@ HB_FUNC( SDL_INITFLAGS )
 }
 
 /* -------------------------------------------------------------------------
-SDL API
+SDL3 API
 ------------------------------------------------------------------------- */
 // bool SDL_Init(SDL_InitFlags flags);
 HB_FUNC( SDL_INIT )
@@ -68,7 +68,30 @@ HB_FUNC( SDL_INIT )
 }
 
 // bool SDL_InitSubSystem(SDL_InitFlags flags);
+HB_FUNC( SDL_INITSUBSYSTEM )
+{
+   if( hb_param( 1, HB_IT_NUMERIC ) != NULL )
+   {
+      hb_retl( SDL_InitSubSystem( ( Uint32 ) hb_parni( 1 ) ) );
+   }
+   else
+   {
+      HB_ERR_ARGS();
+   }
+}
+
 // void SDL_QuitSubSystem(SDL_InitFlags flags);
+HB_FUNC( SDL_QUITSUBSYSTEM )
+{
+   if( hb_param( 1, HB_IT_NUMERIC ) != NULL )
+   {
+      SDL_QuitSubSystem( ( Uint32 ) hb_parni( 1 ) );
+   }
+   else
+   {
+      HB_ERR_ARGS();
+   }
+}
 
 // SDL_InitFlags SDL_WasInit(SDL_InitFlags flags);
 HB_FUNC( SDL_WASINIT )
