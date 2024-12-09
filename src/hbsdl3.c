@@ -183,8 +183,100 @@ void hb_sdl_renderer_Return( SDL_Renderer *pSDL_Renderer )
 }
 
 /* -------------------------------------------------------------------------
-Harbour Implementation
+Garbage Collector SDL_Event
 ------------------------------------------------------------------------- */
+static HB_GARBAGE_FUNC( hb_sdl_event_Destructor )
+{
+   SDL_Event **ppEvent = ( SDL_Event ** ) Cargo;
+
+   if( ppEvent && *ppEvent )
+   {
+      hb_xfree( *ppEvent );
+
+      *ppEvent = NULL;
+   }
+}
+
+static const HB_GC_FUNCS s_gc_sdl_event_Funcs =
+{
+   hb_sdl_event_Destructor,
+   hb_gcDummyMark
+};
+
+SDL_Event *hb_sdl_event_ParamPtr( int iParam )
+{
+   SDL_Event **ppSDL_Event = ( SDL_Event ** ) hb_parptrGC( &s_gc_sdl_event_Funcs, iParam );
+
+   if( ppSDL_Event && *ppSDL_Event )
+      return *ppSDL_Event;
+
+   HB_ERR_ARGS();
+   return NULL;
+}
+
+SDL_Event *hb_sdl_event_ParamGet( int iParam )
+{
+   SDL_Event **ppSDL_Event = ( SDL_Event ** ) hb_parptrGC( &s_gc_sdl_event_Funcs, iParam );
+
+   return ppSDL_Event ? *ppSDL_Event : NULL;
+}
+
+SDL_Event *hb_sdl_event_ItemGet( PHB_ITEM pItem )
+{
+   SDL_Event **ppSDL_Event = ( SDL_Event ** ) hb_itemGetPtrGC( pItem, &s_gc_sdl_event_Funcs );
+
+   return ppSDL_Event ? *ppSDL_Event : NULL;
+}
+
+PHB_ITEM hb_sdl_event_ItemPut( PHB_ITEM pItem, SDL_Event *pSDL_Event )
+{
+   SDL_Event **ppSDL_Event = ( SDL_Event ** ) hb_gcAllocate( sizeof( SDL_Event * ), &s_gc_sdl_event_Funcs );
+
+   *ppSDL_Event = pSDL_Event;
+   return hb_itemPutPtrGC( pItem, ppSDL_Event );
+}
+
+void hb_sdl_event_ItemClear( PHB_ITEM pItem )
+{
+   SDL_Event **ppSDL_Event = ( SDL_Event ** ) hb_itemGetPtrGC( pItem, &s_gc_sdl_event_Funcs );
+
+   if( ppSDL_Event )
+      *ppSDL_Event = NULL;
+}
+
+void hb_sdl_event_StorPtr( SDL_Event *pSDL_Event, int iParam )
+{
+   SDL_Event **ppSDL_Event = ( SDL_Event ** ) hb_gcAllocate( sizeof( SDL_Event * ), &s_gc_sdl_event_Funcs );
+
+   *ppSDL_Event = pSDL_Event;
+   hb_storptrGC( ppSDL_Event, iParam );
+}
+
+void hb_sdl_event_Return( SDL_Event *pSDL_Event )
+{
+   if( pSDL_Event )
+      hb_sdl_event_ItemPut( hb_param( -1, HB_IT_ANY ), pSDL_Event );
+   else
+      hb_ret();
+}
+
+/* -------------------------------------------------------------------------
+Harbour Implementation SDL_Event
+------------------------------------------------------------------------- */
+// int EventType( SDL_Event *pEvent )
+HB_FUNC( EVENTTYPE )
+{
+   if( hb_param( 1, HB_IT_POINTER ) != NULL )
+   {
+      SDL_Event *pEvent = hb_sdl_event_ParamPtr( 1 );
+
+      hb_retni( pEvent->type );
+   }
+   else
+   {
+      HB_ERR_ARGS();
+   }
+}
 
 /* -------------------------------------------------------------------------
 SDL3 API 2.30.10
@@ -822,9 +914,19 @@ HB_FUNC( SDL_CREATEPROPERTIES )
 // SDL_Renderer *SDL_CreateRenderer( SDL_Window *window, const char *name );
 HB_FUNC( SDL_CREATERENDERER )
 {
-   if( hb_param( 1, HB_IT_POINTER ) != NULL && ( hb_param( 2, HB_IT_STRING ) != NULL || hb_param( 2, HB_IT_NIL ) != NULL) )
+   if( hb_param( 1, HB_IT_POINTER ) != NULL )
    {
-      hb_sdl_renderer_Return( SDL_CreateRenderer( hb_sdl_window_ParamPtr( 1 ), hb_parc( 2 ) ) );
+      const char *name = NULL;
+
+      if( hb_param( 2, HB_IT_STRING ) != NULL )
+      {
+         name = hb_parc( 2 );
+      }
+      else if( hb_param( 2, HB_IT_NIL ) != NULL )
+      {
+         name = NULL;
+      }
+      hb_sdl_renderer_Return( SDL_CreateRenderer( hb_sdl_window_ParamPtr( 1 ), name ) );
    }
    else
    {
@@ -4131,9 +4233,28 @@ HB_FUNC( SDL_POINTINRECTFLOAT )
 
 }
 
+// bool SDL_PollEvent( SDL_Event *event );
 HB_FUNC( SDL_POLLEVENT )
 {
+   if( hb_param( 1, HB_IT_BYREF ) != NULL )
+   {
+      SDL_Event *pEvent = ( SDL_Event * ) hb_xgrab( sizeof( SDL_Event ) );
 
+      if( SDL_PollEvent( pEvent ) )
+      {
+         hb_retl( T );
+         hb_sdl_event_StorPtr( pEvent, 1 );
+      }
+      else
+      {
+         hb_xfree( pEvent );
+         hb_retl( F );
+      }
+   }
+   else
+   {
+      HB_ERR_ARGS();
+   }
 }
 
 HB_FUNC( SDL_POPGPUDEBUGGROUP )
@@ -6006,14 +6127,52 @@ HB_FUNC( SDL_WAITCONDITIONTIMEOUT )
 
 }
 
+// bool SDL_WaitEvent( SDL_Event *event );
 HB_FUNC( SDL_WAITEVENT )
 {
+   if( hb_param( 1, HB_IT_BYREF ) != NULL )
+   {
+      SDL_Event *pEvent = ( SDL_Event * ) hb_xgrab( sizeof( SDL_Event ) );
 
+      if( SDL_WaitEvent( pEvent ) )
+      {
+         hb_retl( T );
+         hb_sdl_event_StorPtr( pEvent, 1 );
+      }
+      else
+      {
+         hb_xfree( pEvent );
+         hb_retl( F );
+      }
+   }
+   else
+   {
+      HB_ERR_ARGS();
+   }
 }
 
+// bool SDL_WaitEventTimeout( SDL_Event *event, Sint32 timeoutMS );
 HB_FUNC( SDL_WAITEVENTTIMEOUT )
 {
+   if( hb_param( 1, HB_IT_BYREF ) != NULL && hb_param( 2, HB_IT_NUMERIC ) != NULL )
+   {
+      SDL_Event *pEvent = ( SDL_Event * ) hb_xgrab( sizeof( SDL_Event ) );
 
+      if( SDL_WaitEventTimeout( pEvent, hb_parni( 2 ) ) )
+      {
+         hb_retl( T );
+         hb_sdl_event_StorPtr( pEvent, 1 );
+      }
+      else
+      {
+         hb_xfree( pEvent );
+         hb_retl( F );
+      }
+   }
+   else
+   {
+      HB_ERR_ARGS();
+   }
 }
 
 HB_FUNC( SDL_WAITFORGPUFENCES )
