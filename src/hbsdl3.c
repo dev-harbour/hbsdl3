@@ -105,6 +105,84 @@ void hb_sdl_window_Return( SDL_Window *pSDL_Window )
 }
 
 /* -------------------------------------------------------------------------
+Garbage Collector SDL_Renderer
+------------------------------------------------------------------------- */
+static HB_GARBAGE_FUNC( hb_sdl_renderer_Destructor )
+{
+   SDL_Renderer **ppSDL_Renderer = ( SDL_Renderer ** ) Cargo;
+
+   if( ppSDL_Renderer && *ppSDL_Renderer )
+   {
+      SDL_DestroyRenderer( *ppSDL_Renderer );
+
+      *ppSDL_Renderer = NULL;
+   }
+}
+
+static const HB_GC_FUNCS s_gc_sdl_renderer_Funcs =
+{
+   hb_sdl_renderer_Destructor,
+   hb_gcDummyMark
+};
+
+SDL_Renderer *hb_sdl_renderer_ParamPtr( int iParam )
+{
+   SDL_Renderer **ppSDL_Renderer = ( SDL_Renderer ** ) hb_parptrGC( &s_gc_sdl_renderer_Funcs, iParam );
+
+   if( ppSDL_Renderer && *ppSDL_Renderer )
+   {
+      return *ppSDL_Renderer;
+   }
+   else
+   {
+      HB_ERR_ARGS();
+      return NULL;
+   }
+}
+
+SDL_Renderer *hb_sdl_renderer_ParamGet( int iParam )
+{
+   SDL_Renderer **ppSDL_Renderer = ( SDL_Renderer ** ) hb_parptrGC( &s_gc_sdl_renderer_Funcs, iParam );
+
+   return IIF( ppSDL_Renderer, *ppSDL_Renderer, NULL );
+}
+
+SDL_Renderer *hb_sdl_renderer_ItemGet( PHB_ITEM pItem )
+{
+   SDL_Renderer **ppSDL_Renderer = ( SDL_Renderer ** ) hb_itemGetPtrGC( pItem, &s_gc_sdl_renderer_Funcs );
+
+   return IIF( ppSDL_Renderer, *ppSDL_Renderer, NULL );
+}
+
+PHB_ITEM hb_sdl_renderer_ItemPut( PHB_ITEM pItem, SDL_Renderer *pSDL_Renderer )
+{
+   SDL_Renderer **ppSDL_Renderer = ( SDL_Renderer ** ) hb_gcAllocate( sizeof( SDL_Renderer * ), &s_gc_sdl_renderer_Funcs );
+
+   *ppSDL_Renderer = pSDL_Renderer;
+   return hb_itemPutPtrGC( pItem, ppSDL_Renderer );
+}
+
+void hb_sdl_renderer_ItemClear( PHB_ITEM pItem )
+{
+   SDL_Renderer **ppSDL_Renderer = ( SDL_Renderer ** ) hb_itemGetPtrGC( pItem, &s_gc_sdl_renderer_Funcs );
+
+   if( ppSDL_Renderer )
+      *ppSDL_Renderer = NULL;
+}
+
+void hb_sdl_renderer_Return( SDL_Renderer *pSDL_Renderer )
+{
+   if( pSDL_Renderer )
+   {
+      hb_sdl_renderer_ItemPut( hb_param( -1, HB_IT_ANY ), pSDL_Renderer );
+   }
+   else
+   {
+      hb_ret();
+   }
+}
+
+/* -------------------------------------------------------------------------
 Harbour Implementation
 ------------------------------------------------------------------------- */
 
@@ -741,9 +819,17 @@ HB_FUNC( SDL_CREATEPROPERTIES )
 
 }
 
+// SDL_Renderer *SDL_CreateRenderer( SDL_Window *window, const char *name );
 HB_FUNC( SDL_CREATERENDERER )
 {
-
+   if( hb_param( 1, HB_IT_POINTER ) != NULL && ( hb_param( 2, HB_IT_STRING ) != NULL || hb_param( 2, HB_IT_NIL ) != NULL) )
+   {
+      hb_sdl_renderer_Return( SDL_CreateRenderer( hb_sdl_window_ParamPtr( 1 ), hb_parc( 2 ) ) );
+   }
+   else
+   {
+      HB_ERR_ARGS();
+   }
 }
 
 HB_FUNC( SDL_CREATERENDERERWITHPROPERTIES )
@@ -816,9 +902,17 @@ HB_FUNC( SDL_CREATETHREADWITHPROPERTIES )
 
 }
 
+// SDL_Window *SDL_CreateWindow( const char *title, int w, int h, SDL_WindowFlags flags );
 HB_FUNC( SDL_CREATEWINDOW )
 {
-
+   if( hb_param( 1, HB_IT_STRING ) != NULL && hb_param( 2, HB_IT_NUMERIC ) != NULL && hb_param( 3, HB_IT_NUMERIC ) != NULL && hb_param( 4, HB_IT_NUMERIC ) != NULL )
+   {
+      hb_sdl_window_Return( SDL_CreateWindow( hb_parc( 1 ), hb_parni( 2 ), hb_parni( 3 ), hb_parni( 4 ) ) );
+   }
+   else
+   {
+      HB_ERR_ARGS();
+   }
 }
 
 HB_FUNC( SDL_CREATEWINDOWANDRENDERER )
@@ -4403,9 +4497,17 @@ HB_FUNC( SDL_RENAMESTORAGEPATH )
 
 }
 
+// bool SDL_RenderClear( SDL_Renderer *renderer );
 HB_FUNC( SDL_RENDERCLEAR )
 {
-
+   if( hb_param( 1, HB_IT_POINTER ) != NULL )
+   {
+      hb_retl( SDL_RenderClear( hb_sdl_renderer_ParamPtr( 1 ) ) );
+   }
+   else
+   {
+      HB_ERR_ARGS();
+   }
 }
 
 HB_FUNC( SDL_RENDERCLIPENABLED )
@@ -4468,9 +4570,17 @@ HB_FUNC( SDL_RENDERPOINTS )
 
 }
 
+// bool SDL_RenderPresent( SDL_Renderer *renderer );
 HB_FUNC( SDL_RENDERPRESENT )
 {
-
+   if( hb_param( 1, HB_IT_POINTER ) != NULL )
+   {
+      SDL_RenderPresent( hb_sdl_renderer_ParamPtr( 1 ) );
+   }
+   else
+   {
+      HB_ERR_ARGS();
+   }
 }
 
 HB_FUNC( SDL_RENDERREADPIXELS )
@@ -5061,9 +5171,34 @@ HB_FUNC( SDL_SETRENDERDRAWBLENDMODE )
 
 }
 
+// bool SDL_SetRenderDrawColor( SDL_Renderer *renderer, Uint8 r, Uint8 g, Uint8 b, Uint8 a );
 HB_FUNC( SDL_SETRENDERDRAWCOLOR )
 {
+   if( hb_param( 1, HB_IT_POINTER ) != NULL &&
+       hb_param( 2, HB_IT_NUMERIC ) != NULL &&
+       hb_param( 3, HB_IT_NUMERIC ) != NULL &&
+       hb_param( 4, HB_IT_NUMERIC ) != NULL &&
+       hb_param( 5, HB_IT_NUMERIC ) != NULL )
+   {
+      SDL_Renderer *pRenderer = hb_sdl_renderer_ParamPtr( 1 );
+      int r = hb_parni( 2 );
+      int g = hb_parni( 3 );
+      int b = hb_parni( 4 );
+      int a = hb_parni( 5 );
 
+      if( r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255 || a < 0 || a > 255 )
+      {
+         HB_ERR_ARGS();
+      }
+      else
+      {
+         hb_retl( SDL_SetRenderDrawColor( pRenderer, ( Uint8 ) r, ( Uint8 ) g, ( Uint8 ) b, ( Uint8 ) a ) );
+      }
+   }
+   else
+   {
+      HB_ERR_ARGS();
+   }
 }
 
 HB_FUNC( SDL_SETRENDERDRAWCOLORFLOAT )
