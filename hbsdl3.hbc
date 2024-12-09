@@ -1,0 +1,11 @@
+description=Harbour SDL3
+
+incpaths=include
+headers=include/${hb_name}.ch
+
+libpaths=lib/${hb_plat}/${hb_comp}
+
+libs=${_HB_DYNPREF}${hb_name}${_HB_DYNSUFF}
+
+{win}libs=mingw32 SDL3
+{linux}libs=SDL3
