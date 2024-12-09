@@ -23,6 +23,13 @@ extern PHB_ITEM    hb_sdl_window_ItemPut( PHB_ITEM pItem, SDL_Window *pSDL_Windo
 extern void        hb_sdl_window_ItemClear( PHB_ITEM pItem );
 extern void        hb_sdl_window_Return( SDL_Window *pSDL_Window );
 
+extern SDL_Renderer *hb_sdl_renderer_ParamPtr( int iParam );
+extern SDL_Renderer *hb_sdl_renderer_ParamGet( int iParam );
+extern SDL_Renderer *hb_sdl_renderer_ItemGet( PHB_ITEM pItem );
+extern PHB_ITEM      hb_sdl_renderer_ItemPut( PHB_ITEM pItem, SDL_Renderer *pSDL_Renderer );
+extern void          hb_sdl_renderer_ItemClear( PHB_ITEM pItem );
+extern void          hb_sdl_renderer_Return( SDL_Renderer *pSDL_Renderer );
+
 extern SDL_Event  *hb_sdl_event_ParamPtr( int iParam );
 extern SDL_Event  *hb_sdl_event_ParamGet( int iParam );
 extern SDL_Event  *hb_sdl_event_ItemGet( PHB_ITEM pItem );
