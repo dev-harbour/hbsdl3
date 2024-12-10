@@ -73,6 +73,6 @@ PROCEDURE Main()
 
    ENDDO
 
-  
+   // All cleanup functions are automatically handled by the Harbour Garbage Collector.
 
 RETURN
