@@ -263,7 +263,9 @@ void hb_sdl_event_Return( SDL_Event *pSDL_Event )
 /* -------------------------------------------------------------------------
 Harbour Implementation SDL_Event
 ------------------------------------------------------------------------- */
-// int EventType( SDL_Event *pEvent )
+/* SDL_KeyboardEvent */
+
+// int EventType( SDL_Event *pEvent ); /**< SDL_EVENT_KEY_DOWN or SDL_EVENT_KEY_UP */
 HB_FUNC( EVENTTYPE )
 {
    if( hb_param( 1, HB_IT_POINTER ) != NULL )
@@ -277,6 +279,148 @@ HB_FUNC( EVENTTYPE )
       HB_ERR_ARGS();
    }
 }
+
+// Uint32 EventKeyReserved( SDL_Event *pEvent );
+HB_FUNC( EVENTKEYRESERVED )
+{
+   if( hb_param( 1, HB_IT_POINTER ) != NULL )
+   {
+      SDL_Event *pEvent = hb_sdl_event_ParamPtr( 1 );
+      hb_retni( pEvent->key.reserved );
+   }
+   else
+   {
+      HB_ERR_ARGS();
+   }
+}
+
+// Uint64 EventKeyTimestamp( SDL_Event *pEvent ); /**< In nanoseconds, populated using SDL_GetTicksNS() */
+HB_FUNC( EVENTKEYTIMESTAMP )
+{
+   if( hb_param( 1, HB_IT_POINTER ) != NULL )
+   {
+      SDL_Event *pEvent = hb_sdl_event_ParamPtr( 1 );
+      hb_retnint( pEvent->key.timestamp ); // Zwracanie 64-bitowej wartości
+   }
+   else
+   {
+      HB_ERR_ARGS();
+   }
+}
+
+// int EventKeyWindowID( SDL_Event *pEvent ); /**< The window with keyboard focus, if any */
+HB_FUNC( EVENTKEYWINDOWID )
+{
+   if( hb_param( 1, HB_IT_POINTER ) != NULL )
+   {
+      SDL_Event *pEvent = hb_sdl_event_ParamPtr( 1 );
+      hb_retni( pEvent->key.windowID );
+   }
+   else
+   {
+      HB_ERR_ARGS();
+   }
+}
+
+// int EventKeyWhich( SDL_Event *pEvent ); /**< The keyboard instance id, or 0 if unknown or virtual */
+HB_FUNC( EVENTKEYWHICH )
+{
+   if( hb_param( 1, HB_IT_POINTER ) != NULL )
+   {
+      SDL_Event *pEvent = hb_sdl_event_ParamPtr( 1 );
+      hb_retni( pEvent->key.which );
+   }
+   else
+   {
+      HB_ERR_ARGS();
+   }
+}
+
+// int EventKeyScancode( SDL_Event *pEvent );
+HB_FUNC( EVENTKEYSCANCODE )
+{
+   if( hb_param( 1, HB_IT_POINTER ) != NULL )
+   {
+      SDL_Event *pEvent = hb_sdl_event_ParamPtr( 1 );
+      hb_retni( pEvent->key.scancode );
+   }
+   else
+   {
+      HB_ERR_ARGS();
+   }
+}
+
+// int EventKeyKey( SDL_Event *pEvent ); /**< SDL virtual key code */
+HB_FUNC( EVENTKEYKEY )
+{
+   if( hb_param( 1, HB_IT_POINTER ) != NULL )
+   {
+      SDL_Event *pEvent = hb_sdl_event_ParamPtr( 1 );
+      hb_retni( pEvent->key.key );
+   }
+   else
+   {
+      HB_ERR_ARGS();
+   }
+}
+
+// int EventKeyMod( SDL_Event *pEvent ); /**< current key modifiers */
+HB_FUNC( EVENTKEYMOD )
+{
+   if( hb_param( 1, HB_IT_POINTER ) != NULL )
+   {
+      SDL_Event *pEvent = hb_sdl_event_ParamPtr( 1 );
+      hb_retni( pEvent->key.mod );
+   }
+   else
+   {
+      HB_ERR_ARGS();
+   }
+}
+
+// Uint16 EventKeyRaw( SDL_Event *pEvent ); /**< The platform dependent scancode for this event */
+HB_FUNC( EVENTKEYRAW )
+{
+   if( hb_param( 1, HB_IT_POINTER ) != NULL )
+   {
+      SDL_Event *pEvent = hb_sdl_event_ParamPtr( 1 );
+
+      hb_retni( pEvent->key.raw );
+   }
+   else
+   {
+      HB_ERR_ARGS();
+   }
+}
+
+// bool EventKeyDown( SDL_Event *pEvent ); /**< true if the key is pressed */
+HB_FUNC( EVENTKEYDOWN )
+{
+   if( hb_param( 1, HB_IT_POINTER ) != NULL )
+   {
+      SDL_Event *pEvent = hb_sdl_event_ParamPtr( 1 );
+      hb_retl( pEvent->key.down );
+   }
+   else
+   {
+      HB_ERR_ARGS();
+   }
+}
+
+// bool EventKeyRepeat( SDL_Event *pEvent ); /**< true if this is a key repeat */
+HB_FUNC( EVENTKEYREPEAT )
+{
+   if( hb_param( 1, HB_IT_POINTER ) != NULL )
+   {
+      SDL_Event *pEvent = hb_sdl_event_ParamPtr( 1 );
+      hb_retl( pEvent->key.repeat );
+   }
+   else
+   {
+      HB_ERR_ARGS();
+   }
+}
+/* End SDL_KeyboardEvent */
 
 /* -------------------------------------------------------------------------
 SDL3 API 2.30.10
