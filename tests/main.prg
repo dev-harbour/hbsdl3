@@ -12,6 +12,8 @@ PROCEDURE Main()
    LOCAL pEvent
    LOCAL lQuit := .F.
 
+   SDL_SetHint( SDL_HINT_SHUTDOWN_DBUS_ON_QUIT, "1" )
+
    IF( !SDL_Init( SDL_INIT_VIDEO ) )
       OutStd( e"\nError initializing SDL: ", SDL_GetError() )
       RETURN
@@ -39,7 +41,7 @@ PROCEDURE Main()
 
       ENDDO
 
-      SDL_SetRenderDrawColor( pRenderer, 12, 12, 12, 255 )
+      SDL_SetRenderDrawColor( pRenderer, 50, 50, 50, 255 )
       SDL_RenderClear( pRenderer )
       SDL_RenderPresent( pRenderer )
 
