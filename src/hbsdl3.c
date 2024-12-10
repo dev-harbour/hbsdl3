@@ -1,6 +1,5 @@
 /*
  * Copyright 2024 Rafał Jopek <https://harbour.pl>
- *
  */
 
 #include "hbsdl3.h"
@@ -263,8 +262,6 @@ void hb_sdl_event_Return( SDL_Event *pSDL_Event )
 /* -------------------------------------------------------------------------
 Harbour Implementation SDL_Event
 ------------------------------------------------------------------------- */
-/* SDL_KeyboardEvent */
-
 // int EventType( SDL_Event *pEvent ); /**< SDL_EVENT_KEY_DOWN or SDL_EVENT_KEY_UP */
 HB_FUNC( EVENTTYPE )
 {
@@ -280,6 +277,9 @@ HB_FUNC( EVENTTYPE )
    }
 }
 
+/* -------------------------------------------------------------------------
+SDL_KeyboardEvent
+------------------------------------------------------------------------- */
 // Uint32 EventKeyReserved( SDL_Event *pEvent );
 HB_FUNC( EVENTKEYRESERVED )
 {
