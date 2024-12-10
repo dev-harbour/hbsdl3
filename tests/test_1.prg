@@ -6,7 +6,7 @@
 
 PROCEDURE Main()
 
-   // SDL_SetHint( SDL_HINT_SHUTDOWN_DBUS_ON_QUIT, "1" )
+   SDL_SetHint( SDL_HINT_SHUTDOWN_DBUS_ON_QUIT, "1" )
 
    IF( !SDL_Init( SDL_INIT_VIDEO ) )
       OutStd( e"\nError initializing SDL: ", SDL_GetError() )
