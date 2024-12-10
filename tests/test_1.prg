@@ -15,5 +15,6 @@ PROCEDURE Main()
 
    SDL_Delay( 2000 )
 
+   // All cleanup functions are automatically handled by the Harbour Garbage Collector.
 
 RETURN
