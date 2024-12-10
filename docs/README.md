@@ -1,5 +1,5 @@
 
-# hbsdl2 Installation Guide
+# hbsdl3 Installation Guide
 
 `hbsdl3` is a library for integrating Harbour with SDL3. This guide explains how to install `hbsdl3` on Windows (using MSYS2) and Linux (Debian-based systems).
 
