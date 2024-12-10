@@ -1,6 +1,6 @@
 
 /*
- *
+ * Copyright 2024 Rafał Jopek <https://harbour.pl>
  */
 
 #include "hbsdl3.ch"
@@ -10,7 +10,7 @@ PROCEDURE Main()
    LOCAL pWindow
    LOCAL pRenderer
    LOCAL pEvent
-   LOCAL lQuit := .F.
+   LOCAL lQuit := F
 
    SDL_SetHint( SDL_HINT_SHUTDOWN_DBUS_ON_QUIT, "1" )
 
@@ -35,9 +35,35 @@ PROCEDURE Main()
 
       DO WHILE( SDL_PollEvent( @pEvent ) )
 
-         IF( EventType( pEvent ) == SDL_EVENT_QUIT )
-            lQuit := .T.
-         ENDIF
+         SWITCH( EventType( pEvent ) )
+
+            CASE SDL_EVENT_QUIT
+               OutStd( e"\nWindow closed" )
+               lQuit := T
+               EXIT
+
+            CASE SDL_EVENT_WINDOW_CLOSE_REQUESTED
+               OutStd( e"\nWindow close requested" )
+               lQuit := T
+               EXIT
+
+            CASE SDL_EVENT_KEY_DOWN
+               IF( EventKeyKey( pEvent ) == SDLK_ESCAPE )
+                  OutStd( e"\nEsc pressed" )
+                  lQuit := T
+               ELSE
+                  OutStd( e"\nOther key pressed (scancode: ", EventKeyKey( pEvent ), ")" )
+               ENDIF
+               EXIT
+
+            CASE SDL_EVENT_KEY_UP
+               OutStd( e"\nKey released (scancode: ", EventKeyKey( pEvent ), ")" )
+               EXIT
+
+            OTHERWISE
+               OutStd( e"\nUnhandled event (type: ", EventType( pEvent ), ")" )
+
+         ENDSWITCH
 
       ENDDO
 
@@ -46,5 +72,7 @@ PROCEDURE Main()
       SDL_RenderPresent( pRenderer )
 
    ENDDO
+
+  
 
 RETURN
