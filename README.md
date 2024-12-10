@@ -1,6 +1,6 @@
 # hbsdl3 - Simple DirectMedia Layer for Harbour
 
-`hbsdl3` is a set of language bindings for Harbour, based on the [SDL3](https://www.libsdl.org/) (Simple DirectMedia Layer) Version: 3.1.7.
+`hbsdl3` is a set of language bindings for Harbour, based on the [SDL3](https://www.libsdl.org/) (Simple DirectMedia Layer) Version: 2.30.10
 The goal of the project is to simplify the development of multimedia applications, games, and interactive programs in the Harbour environment.
 
 The project is in development and its functionality is constantly evolving.
