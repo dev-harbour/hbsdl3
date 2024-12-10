@@ -3,11 +3,8 @@
 
 `hbsdl3` is a library for integrating Harbour with SDL3. This guide explains how to install `hbsdl3` on Windows (using MSYS2) and Linux (Debian-based systems).
 
----
-
 ## Installation on Windows (MSYS2)
 
-### Prerequisites
 Ensure you are running the **MinGW 64-bit shell**.
 
 1. Install required packages:
@@ -43,11 +40,8 @@ Ensure you are running the **MinGW 64-bit shell**.
    hbmk2 main.prg
    ```
 
----
-
 ## Installation on Linux (Debian-based systems)
 
-### Prerequisites
 Ensure you have development tools like `git`, `cmake`, and a Harbour compiler installed.
 
 1. Install SDL3:
@@ -77,13 +71,3 @@ Ensure you have development tools like `git`, `cmake`, and a Harbour compiler in
    cd tests
    hbmk2 main.prg
    ```
-
----
-
-## Notes
-
-- **SDL3 Installation**: Ensure SDL3 is properly installed in the expected directories. For Windows, use `/mingw64`, and for Linux, use `/usr`.
-- **Testing**: Always verify that both SDL3 and `hbsdl3` are installed correctly by running the included test programs.
-- **Parallel Compilation**: The `-j$(nproc)` flag in `make` optimizes the build process by using all available CPU cores.
-
----
