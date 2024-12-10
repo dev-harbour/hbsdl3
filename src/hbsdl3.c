@@ -277,9 +277,9 @@ HB_FUNC( EVENTTYPE )
    }
 }
 
-/* -------------------------------------------------------------------------
-SDL_KeyboardEvent
-------------------------------------------------------------------------- */
+/*
+ * SDL_KeyboardEvent
+ */
 // Uint32 EventKeyReserved( SDL_Event *pEvent );
 HB_FUNC( EVENTKEYRESERVED )
 {
