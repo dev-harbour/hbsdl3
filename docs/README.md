@@ -7,12 +7,12 @@
 
 Ensure you are running the **MinGW 64-bit shell**.
 
-1. Install required packages:
+- Install required packages:
    ```bash
    pacman -S mingw-w64-x86_64-toolchain mingw-w64-x86_64-cmake
    ```
 
-2. Install SDL3:
+- Install SDL3:
    ```bash
    git clone https://github.com/libsdl-org/SDL
    cd SDL
@@ -23,18 +23,18 @@ Ensure you are running the **MinGW 64-bit shell**.
    mingw32-make install
    ```
 
-3. Clone the `hbsdl3` repository:
+- Clone the `hbsdl3` repository:
    ```bash
    git clone https://github.com/dev-harbour/hbsdl3
    ```
 
-4. Build the static library:
+- Build the static library:
    ```bash
    cd hbsdl3
    hbmk2 hbsdl3.hbp
    ```
 
-5. Run tests or examples:
+- Run tests or examples:
    ```bash
    cd tests
    hbmk2 main.prg
@@ -44,7 +44,7 @@ Ensure you are running the **MinGW 64-bit shell**.
 
 Ensure you have development tools like `git`, `cmake`, and a Harbour compiler installed.
 
-1. Install SDL3:
+- Install SDL3:
    ```bash
    git clone https://github.com/libsdl-org/SDL
    cd SDL
@@ -55,18 +55,18 @@ Ensure you have development tools like `git`, `cmake`, and a Harbour compiler in
    sudo cmake --install . --config Release
    ```
 
-2. Clone the `hbsdl3` repository:
+- Clone the `hbsdl3` repository:
    ```bash
    git clone https://github.com/dev-harbour/hbsdl3
    ```
 
-3. Build the static library:
+- Build the static library:
    ```bash
    cd hbsdl3
    hbmk2 hbsdl3.hbp
    ```
 
-4. Run tests or examples:
+- Run tests or examples:
    ```bash
    cd tests
    hbmk2 main.prg
