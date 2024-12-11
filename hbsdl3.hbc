@@ -8,4 +8,4 @@ libpaths=lib/${hb_plat}/${hb_comp}
 libs=${_HB_DYNPREF}${hb_name}${_HB_DYNSUFF}
 
 {win}libs=mingw32 SDL3
-{linux}libs=SDL3
+{linux}libs=SDL3 SDL3_ttf
