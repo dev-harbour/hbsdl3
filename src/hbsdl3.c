@@ -6512,6 +6512,82 @@ HB_FUNC( SDL_WRITEU8 )
 /* -------------------------------------------------------------------------
 SDL3_ttf
 ------------------------------------------------------------------------- */
+static HB_GARBAGE_FUNC( hb_ttf_font_Destructor )
+{
+   TTF_Font **ppTTF_Font = ( TTF_Font ** ) Cargo;
+
+   if( ppTTF_Font && *ppTTF_Font )
+   {
+
+      TTF_CloseFont( *ppTTF_Font );
+      TTF_Quit();
+      *ppTTF_Font = NULL;
+   }
+}
+
+static const HB_GC_FUNCS s_gc_ttf_font_Funcs =
+{
+   hb_ttf_font_Destructor,
+   hb_gcDummyMark
+};
+
+TTF_Font *hb_ttf_font_ParamPtr( int iParam )
+{
+   TTF_Font **ppTTF_Font = ( TTF_Font ** ) hb_parptrGC( &s_gc_ttf_font_Funcs, iParam );
+
+   if( ppTTF_Font && *ppTTF_Font )
+   {
+      return *ppTTF_Font;
+   }
+   else
+   {
+      HB_ERR_ARGS();
+      return NULL;
+   }
+}
+
+TTF_Font *hb_ttf_font_ParamGet( int iParam )
+{
+   TTF_Font **ppTTF_Font = ( TTF_Font ** ) hb_parptrGC( &s_gc_ttf_font_Funcs, iParam );
+
+   return IIF( ppTTF_Font, *ppTTF_Font, NULL );
+}
+
+TTF_Font *hb_ttf_font_ItemGet( PHB_ITEM pItem )
+{
+   TTF_Font **ppTTF_Font = ( TTF_Font ** ) hb_itemGetPtrGC( pItem, &s_gc_ttf_font_Funcs );
+
+   return IIF( ppTTF_Font, *ppTTF_Font, NULL );
+}
+
+PHB_ITEM hb_ttf_font_ItemPut( PHB_ITEM pItem, TTF_Font *pTTF_Font )
+{
+   TTF_Font **ppTTF_Font = ( TTF_Font ** ) hb_gcAllocate( sizeof( TTF_Font * ), &s_gc_ttf_font_Funcs );
+
+   *ppTTF_Font = pTTF_Font;
+   return hb_itemPutPtrGC( pItem, ppTTF_Font );
+}
+
+void hb_ttf_font_ItemClear( PHB_ITEM pItem )
+{
+   TTF_Font **ppTTF_Font = ( TTF_Font ** ) hb_itemGetPtrGC( pItem, &s_gc_ttf_font_Funcs );
+
+   if( ppTTF_Font )
+      *ppTTF_Font = NULL;
+}
+
+void hb_ttf_font_Return( TTF_Font *pTTF_Font )
+{
+   if( pTTF_Font )
+   {
+      hb_ttf_font_ItemPut( hb_param( -1, HB_IT_ANY ), pTTF_Font );
+   }
+   else
+   {
+      hb_ret();
+   }
+}
+
 HB_FUNC( TTF_APPENDTEXTSTRING )
 {
 
@@ -6797,9 +6873,10 @@ HB_FUNC( TTF_GETTEXTWRAPWIDTH )
 
 }
 
+//bool TTF_Init( void );
 HB_FUNC( TTF_INIT )
 {
-
+   hb_retl( TTF_Init() );
 }
 
 HB_FUNC( TTF_INSERTTEXTSTRING )
