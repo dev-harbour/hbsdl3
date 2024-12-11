@@ -55,6 +55,13 @@ Ensure you have development tools like `git`, `cmake`, and a Harbour compiler in
    sudo cmake --install . --config Release
    ```
 
+   ```bash
+   git clone https://github.com/libsdl-org/SDL_ttf
+   cd SDL_ttf
+   # as above
+   ```
+
+
 - Clone the `hbsdl3` repository:
    ```bash
    git clone https://github.com/dev-harbour/hbsdl3
