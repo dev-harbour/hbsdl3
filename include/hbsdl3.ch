@@ -1,12 +1,12 @@
 #ifndef HBSDL3_CH_
 #define HBSDL3_CH_
 
-/* -------------------------------------------------------------------------
-Harbour Implementation SDL_Event
-------------------------------------------------------------------------- */
 #define F .F.
 #define T .T.
 
+/* -------------------------------------------------------------------------
+SDL3
+------------------------------------------------------------------------- */
 /* SDL_events_h_ */
 #define SDL_EVENT_FIRST                         0
 #define SDL_EVENT_QUIT                          0x100
@@ -850,5 +850,54 @@ Harbour Implementation SDL_Event
 #define SDL_HITTEST_RESIZE_BOTTOMLEFT  8
 #define SDL_HITTEST_RESIZE_LEFT        9
 /* END SDL_video_h_ */
+
+/* -------------------------------------------------------------------------
+SDL3_ttf
+------------------------------------------------------------------------- */
+
+/* SDL_TTF_H_ */
+#define SDL_TTF_MAJOR_VERSION   3
+#define SDL_TTF_MINOR_VERSION   0
+#define SDL_TTF_MICRO_VERSION   0
+
+// #define SDL_TTF_VERSION SDL_VERSIONNUM( SDL_TTF_MAJOR_VERSION, SDL_TTF_MINOR_VERSION, SDL_TTF_MICRO_VERSION )
+
+#define TTF_PROP_FONT_CREATE_FILENAME_STRING            "SDL_ttf.font.create.filename"
+#define TTF_PROP_FONT_CREATE_IOSTREAM_POINTER           "SDL_ttf.font.create.iostream"
+#define TTF_PROP_FONT_CREATE_IOSTREAM_OFFSET_NUMBER     "SDL_ttf.font.create.iostream.offset"
+#define TTF_PROP_FONT_CREATE_IOSTREAM_AUTOCLOSE_BOOLEAN "SDL_ttf.font.create.iostream.autoclose"
+#define TTF_PROP_FONT_CREATE_SIZE_FLOAT                 "SDL_ttf.font.create.size"
+#define TTF_PROP_FONT_CREATE_FACE_NUMBER                "SDL_ttf.font.create.face"
+#define TTF_PROP_FONT_CREATE_HORIZONTAL_DPI_NUMBER      "SDL_ttf.font.create.hdpi"
+#define TTF_PROP_FONT_CREATE_VERTICAL_DPI_NUMBER        "SDL_ttf.font.create.vdpi"
+#define TTF_PROP_FONT_OUTLINE_LINE_CAP_NUMBER           "SDL_ttf.font.outline.line_cap"
+#define TTF_PROP_FONT_OUTLINE_LINE_JOIN_NUMBER          "SDL_ttf.font.outline.line_join"
+#define TTF_PROP_FONT_OUTLINE_MITER_LIMIT_NUMBER        "SDL_ttf.font.outline.miter_limit"
+#define TTF_STYLE_NORMAL              0x00
+#define TTF_STYLE_BOLD                0x01
+#define TTF_STYLE_ITALIC              0x02
+#define TTF_STYLE_UNDERLINE           0x04
+#define TTF_STYLE_STRIKETHROUGH       0x08
+#define TTF_HINTING_NORMAL            0
+#define TTF_HINTING_LIGHT             1
+#define TTF_HINTING_MONO              2
+#define TTF_HINTING_NONE              3
+#define TTF_HINTING_LIGHT_SUBPIXEL    4
+
+#define TTF_HORIZONTAL_ALIGN_INVALID -1
+#define TTF_HORIZONTAL_ALIGN_LEFT     0
+#define TTF_HORIZONTAL_ALIGN_CENTER   1
+#define TTF_HORIZONTAL_ALIGN_RIGHT    2
+
+#define TTF_DIRECTION_LTR             0
+#define TTF_DIRECTION_RTL             1
+#define TTF_DIRECTION_TTB             2
+#define TTF_DIRECTION_BTT             3
+
+#define TTF_SUBSTRING_TEXT_START      0x00000001
+#define TTF_SUBSTRING_LINE_START      0x00000002
+#define TTF_SUBSTRING_LINE_END        0x00000004
+#define TTF_SUBSTRING_TEXT_END        0x00000008
+/* End SDL_TTF_H_ */
 
 #endif /* End HBSDL3_CH_ */
