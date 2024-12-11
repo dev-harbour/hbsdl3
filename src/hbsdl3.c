@@ -6518,7 +6518,6 @@ static HB_GARBAGE_FUNC( hb_ttf_font_Destructor )
 
    if( ppTTF_Font && *ppTTF_Font )
    {
-
       TTF_CloseFont( *ppTTF_Font );
       TTF_Quit();
       *ppTTF_Font = NULL;
