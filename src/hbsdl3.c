@@ -5631,14 +5631,30 @@ HB_FUNC( SDL_SETWINDOWKEYBOARDGRAB )
 
 }
 
+// bool SDL_SetWindowMaximumSize( SDL_Window *window, int max_w, int max_h );
 HB_FUNC( SDL_SETWINDOWMAXIMUMSIZE )
 {
-
+   if( hb_param( 1, HB_IT_POINTER ) != NULL && hb_param( 2, HB_IT_NUMERIC ) != NULL && hb_param( 3, HB_IT_NUMERIC ) != NULL )
+   {
+      hb_retl( SDL_SetWindowMaximumSize( hb_sdl_window_ParamPtr( 1 ), hb_parni( 2 ), hb_parni( 3 ) ) );
+   }
+   else
+   {
+      HB_ERR_ARGS();
+   }
 }
 
+// bool SDL_SetWindowMinimumSize( SDL_Window *window, int min_w, int min_h );
 HB_FUNC( SDL_SETWINDOWMINIMUMSIZE )
 {
-
+   if( hb_param( 1, HB_IT_POINTER ) != NULL && hb_param( 2, HB_IT_NUMERIC ) != NULL && hb_param( 3, HB_IT_NUMERIC ) != NULL )
+   {
+      hb_retl( SDL_SetWindowMinimumSize( hb_sdl_window_ParamPtr( 1 ), hb_parni( 2 ), hb_parni( 3 ) ) );
+   }
+   else
+   {
+      HB_ERR_ARGS();
+   }
 }
 
 HB_FUNC( SDL_SETWINDOWMODAL )
@@ -5686,9 +5702,17 @@ HB_FUNC( SDL_SETWINDOWSHAPE )
 
 }
 
+// bool SDL_SetWindowSize( SDL_Window *window, int w, int h );
 HB_FUNC( SDL_SETWINDOWSIZE )
 {
-
+   if( hb_param( 1, HB_IT_POINTER ) != NULL && hb_param( 2, HB_IT_NUMERIC ) != NULL && hb_param( 3, HB_IT_NUMERIC ) != NULL )
+   {
+      hb_retl( SDL_SetWindowSize( hb_sdl_window_ParamPtr( 1 ), hb_parni( 2 ), hb_parni( 3 ) ) );
+   }
+   else
+   {
+      HB_ERR_ARGS();
+   }
 }
 
 HB_FUNC( SDL_SETWINDOWSMESSAGEHOOK )
@@ -6888,9 +6912,17 @@ HB_FUNC( TTF_MEASURESTRING )
 
 }
 
+// TTF_Font *TTF_OpenFont( const char *file, float ptsize );
 HB_FUNC( TTF_OPENFONT )
 {
-
+   if( hb_param( 1, HB_IT_STRING ) != NULL && hb_param( 2, HB_IT_NUMERIC ) != NULL )
+   {
+      hb_ttf_font_Return( TTF_OpenFont( hb_parc( 1 ), ( float ) hb_parnd( 2 ) ) );
+   }
+   else
+   {
+      HB_ERR_ARGS();
+   }
 }
 
 HB_FUNC( TTF_OPENFONTIO )
