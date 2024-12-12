@@ -7,6 +7,8 @@ The project is in development and its functionality is constantly evolving.
 
 ### Example
 
+![sdl_drawText](docs/assets/img/sdl_drawText.png)
+
 Examples of mathematical formulas are sourced from `Markus Kuhn's` project. Thank you for granting permission to include them.
 
 ### SDL License
