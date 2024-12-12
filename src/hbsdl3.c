@@ -5606,9 +5606,17 @@ HB_FUNC( SDL_SETWINDOWFOCUSABLE )
 
 }
 
+// bool SDL_SetWindowFullscreen( SDL_Window *window, bool fullscreen );
 HB_FUNC( SDL_SETWINDOWFULLSCREEN )
 {
-
+   if( hb_param( 1, HB_IT_POINTER ) != NULL && hb_param( 2, HB_IT_LOGICAL ) != NULL  )
+   {
+      hb_retl( SDL_SetWindowFullscreen( hb_sdl_window_ParamPtr( 1 ), hb_parl( 2 ) ) );
+   }
+   else
+   {
+      HB_ERR_ARGS();
+   }
 }
 
 HB_FUNC( SDL_SETWINDOWFULLSCREENMODE )
@@ -5682,9 +5690,17 @@ HB_FUNC( SDL_SETWINDOWPARENT )
 
 }
 
+bool SDL_SetWindowPosition( SDL_Window *window, int x, int y );
 HB_FUNC( SDL_SETWINDOWPOSITION )
 {
-
+   if( hb_param( 1, HB_IT_POINTER ) != NULL && hb_param( 2, HB_IT_NUMERIC ) != NULL && hb_param( 3, HB_IT_NUMERIC ) != NULL )
+   {
+      hb_retl( SDL_SetWindowPosition( hb_sdl_window_ParamPtr( 1 ), hb_parni( 2 ), hb_parni( 3 ) ) );
+   }
+   else
+   {
+      HB_ERR_ARGS();
+   }
 }
 
 HB_FUNC( SDL_SETWINDOWRELATIVEMOUSEMODE )
