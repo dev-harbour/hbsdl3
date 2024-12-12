@@ -5,6 +5,10 @@ The goal of the project is to simplify the development of multimedia application
 
 The project is in development and its functionality is constantly evolving.
 
+### Example
+
+Examples of mathematical formulas are sourced from `Markus Kuhn's` project. Thank you for granting permission to include them.
+
 ### SDL License
 This project uses the SDL library, which is:
 - Copyright (C) 1997-2024 Sam Lantinga.
