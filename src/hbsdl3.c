@@ -363,6 +363,30 @@ static PHB_ITEM __attribute__( ( unused ) ) hb_sdl_color_return_array( const SDL
    return pArray;
 }
 
+static struct SDL_FColor __attribute__( ( unused ) ) hb_sdl_fcolor_param_array( PHB_ITEM pArray )
+{
+   SDL_FColor color;
+
+   color.r = ( float ) hb_arrayGetND( pArray, 1 );
+   color.g = ( float ) hb_arrayGetND( pArray, 2 );
+   color.b = ( float ) hb_arrayGetND( pArray, 3 );
+   color.a = ( float ) hb_arrayGetND( pArray, 4 );
+
+   return color;
+}
+
+static PHB_ITEM __attribute__( ( unused ) ) hb_sdl_fcolor_return_array( const SDL_FColor *fcolor )
+{
+   PHB_ITEM pArray = hb_itemArrayNew( 4 );
+
+   hb_arraySetND( pArray, 1, fcolor->r );
+   hb_arraySetND( pArray, 2, fcolor->g );
+   hb_arraySetND( pArray, 3, fcolor->b );
+   hb_arraySetND( pArray, 4, fcolor->a );
+
+   return pArray;
+}
+
 /* -------------------------------------------------------------------------
 Harbour Implementation SDL_Event
 ------------------------------------------------------------------------- */
