@@ -4229,9 +4229,17 @@ HB_FUNC( SDL_METAL_GETLAYER )
 
 }
 
+// bool SDL_MinimizeWindow( SDL_Window *window );
 HB_FUNC( SDL_MINIMIZEWINDOW )
 {
-
+   if( hb_param( 1, HB_IT_POINTER ) != NULL )
+   {
+      hb_retl( SDL_MinimizeWindow( hb_sdl_window_ParamPtr( 1 ) ) );
+   }
+   else
+   {
+      HB_ERR_ARGS();
+   }
 }
 
 HB_FUNC( SDL_MIXAUDIO )
@@ -6081,9 +6089,17 @@ HB_FUNC( SDL_SWAPFLOAT )
 
 }
 
+// bool SDL_SyncWindow( SDL_Window *window );
 HB_FUNC( SDL_SYNCWINDOW )
 {
-
+   if( hb_param( 1, HB_IT_POINTER ) != NULL )
+   {
+      hb_retl( SDL_SyncWindow( hb_sdl_window_ParamPtr( 1 ) ) );
+   }
+   else
+   {
+      HB_ERR_ARGS();
+   }
 }
 
 HB_FUNC( SDL_TAN )
