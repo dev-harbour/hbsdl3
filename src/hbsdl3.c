@@ -260,6 +260,33 @@ void hb_sdl_event_Return( SDL_Event *pSDL_Event )
 }
 
 /* -------------------------------------------------------------------------
+Harbour Implementation Color
+------------------------------------------------------------------------- */
+static struct SDL_Color hb_sdl_color_param_array( PHB_ITEM pArray )
+{
+   SDL_Color color;
+
+   color.r = ( Uint8 ) hb_arrayGetND( pArray, 1 );
+   color.g = ( Uint8 ) hb_arrayGetND( pArray, 2 );
+   color.b = ( Uint8 ) hb_arrayGetND( pArray, 3 );
+   color.a = ( Uint8 ) hb_arrayGetND( pArray, 4 );
+
+   return color;
+}
+
+static PHB_ITEM hb_sdl_color_return_array( const SDL_Color *color )
+{
+   PHB_ITEM pArray = hb_itemArrayNew( 4 );
+
+   hb_arraySetND( ( Uint8 ) pArray, 1, color->r );
+   hb_arraySetND( ( Uint8 ) pArray, 2, color->g );
+   hb_arraySetND( ( Uint8 ) pArray, 3, color->b );
+   hb_arraySetND( ( Uint8 ) pArray, 4, color->a );
+
+   return pArray;
+}
+
+/* -------------------------------------------------------------------------
 Harbour Implementation SDL_Event
 ------------------------------------------------------------------------- */
 // int EventType( SDL_Event *pEvent ); /**< SDL_EVENT_KEY_DOWN or SDL_EVENT_KEY_UP */
@@ -5446,10 +5473,10 @@ HB_FUNC( SDL_SETRENDERDRAWCOLOR )
        hb_param( 5, HB_IT_NUMERIC ) != NULL )
    {
       SDL_Renderer *pRenderer = hb_sdl_renderer_ParamPtr( 1 );
-      int r = hb_parni( 2 );
-      int g = hb_parni( 3 );
-      int b = hb_parni( 4 );
-      int a = hb_parni( 5 );
+      int r = ( Uint8 ) hb_parni( 2 );
+      int g = ( Uint8 ) hb_parni( 3 );
+      int b = ( Uint8 ) hb_parni( 4 );
+      int a = ( Uint8 ) hb_parni( 5 );
 
       if( r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255 || a < 0 || a > 255 )
       {
@@ -5457,7 +5484,7 @@ HB_FUNC( SDL_SETRENDERDRAWCOLOR )
       }
       else
       {
-         hb_retl( SDL_SetRenderDrawColor( pRenderer, ( Uint8 ) r, ( Uint8 ) g, ( Uint8 ) b, ( Uint8 ) a ) );
+         hb_retl( SDL_SetRenderDrawColor( pRenderer, r, g, b, a ) );
       }
    }
    else
@@ -5466,9 +5493,27 @@ HB_FUNC( SDL_SETRENDERDRAWCOLOR )
    }
 }
 
+// bool SDL_SetRenderDrawColorFloat( SDL_Renderer *renderer, float r, float g, float b, float a );
 HB_FUNC( SDL_SETRENDERDRAWCOLORFLOAT )
 {
+   if( hb_param( 1, HB_IT_POINTER ) != NULL &&
+       hb_param( 2, HB_IT_NUMERIC ) != NULL &&
+       hb_param( 3, HB_IT_NUMERIC ) != NULL &&
+       hb_param( 4, HB_IT_NUMERIC ) != NULL &&
+       hb_param( 5, HB_IT_NUMERIC ) != NULL )
+   {
+      SDL_Renderer *pRenderer = hb_sdl_renderer_ParamPtr( 1 );
+      float r = ( float ) hb_parnd( 2 );
+      float g = ( float ) hb_parnd( 3 );
+      float b = ( float ) hb_parnd( 4 );
+      float a = ( float ) hb_parnd( 5 );
 
+      hb_retl( SDL_SetRenderDrawColorFloat( pRenderer, r, g, b, a ) );
+   }
+   else
+   {
+      HB_ERR_ARGS();
+   }
 }
 
 HB_FUNC( SDL_SETRENDERLOGICALPRESENTATION )
