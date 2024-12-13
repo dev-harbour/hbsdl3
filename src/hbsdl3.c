@@ -343,10 +343,10 @@ static struct SDL_Color hb_sdl_color_param_array( PHB_ITEM pArray )
 {
    SDL_Color color;
 
-   color.r = ( Uint8 ) hb_arrayGetND( pArray, 1 );
-   color.g = ( Uint8 ) hb_arrayGetND( pArray, 2 );
-   color.b = ( Uint8 ) hb_arrayGetND( pArray, 3 );
-   color.a = ( Uint8 ) hb_arrayGetND( pArray, 4 );
+   color.r = ( Uint8 ) hb_arrayGetNI( pArray, 1 );
+   color.g = ( Uint8 ) hb_arrayGetNI( pArray, 2 );
+   color.b = ( Uint8 ) hb_arrayGetNI( pArray, 3 );
+   color.a = ( Uint8 ) hb_arrayGetNI( pArray, 4 );
 
    return color;
 }
@@ -355,10 +355,10 @@ static PHB_ITEM __attribute__( ( unused ) ) hb_sdl_color_return_array( const SDL
 {
    PHB_ITEM pArray = hb_itemArrayNew( 4 );
 
-   hb_arraySetND( pArray, 1, color->r );
-   hb_arraySetND( pArray, 2, color->g );
-   hb_arraySetND( pArray, 3, color->b );
-   hb_arraySetND( pArray, 4, color->a );
+   hb_arraySetNI( pArray, 1, color->r );
+   hb_arraySetNI( pArray, 2, color->g );
+   hb_arraySetNI( pArray, 3, color->b );
+   hb_arraySetNI( pArray, 4, color->a );
 
    return pArray;
 }
