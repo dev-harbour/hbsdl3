@@ -337,6 +337,83 @@ void hb_sdl_surface_Return( SDL_Surface *pSDL_Surface )
 }
 
 /* -------------------------------------------------------------------------
+Garbage Collector SDL_Texture
+------------------------------------------------------------------------- */
+static HB_GARBAGE_FUNC( hb_sdl_texture_Destructor )
+{
+   SDL_Texture **ppSDL_Texture = ( SDL_Texture ** ) Cargo;
+
+   if( ppSDL_Texture && *ppSDL_Texture )
+   {
+      SDL_DestroyTexture( *ppSDL_Texture );
+      *ppSDL_Texture = NULL;
+   }
+}
+
+static const HB_GC_FUNCS s_sdl_texture_Funcs =
+{
+   hb_sdl_texture_Destructor,
+   hb_gcDummyMark
+};
+
+SDL_Texture *hb_sdl_texture_ParamPtr( int iParam )
+{
+   SDL_Texture **ppSDL_Texture = ( SDL_Texture ** ) hb_parptrGC( &s_sdl_texture_Funcs, iParam );
+
+   if( ppSDL_Texture && *ppSDL_Texture )
+   {
+      return *ppSDL_Texture;
+   }
+   else
+   {
+      HB_ERR_ARGS();
+      return NULL;
+   }
+}
+
+SDL_Texture *hb_sdl_texture_ParamGet( int iParam )
+{
+   SDL_Texture **ppSDL_Texture = ( SDL_Texture ** ) hb_parptrGC( &s_sdl_texture_Funcs, iParam );
+
+   return IIF( ppSDL_Texture, *ppSDL_Texture, NULL );
+}
+
+SDL_Texture *hb_sdl_texture_ItemGet( PHB_ITEM pItem )
+{
+   SDL_Texture **ppSDL_Texture = ( SDL_Texture ** ) hb_itemGetPtrGC( pItem, &s_sdl_texture_Funcs );
+
+   return IIF( ppSDL_Texture, *ppSDL_Texture, NULL );
+}
+
+PHB_ITEM hb_sdl_texture_ItemPut( PHB_ITEM pItem, SDL_Texture *pSDL_Texture )
+{
+   SDL_Texture **ppSDL_Texture = ( SDL_Texture ** ) hb_gcAllocate( sizeof( SDL_Texture * ), &s_sdl_texture_Funcs );
+
+   *ppSDL_Texture = pSDL_Texture;
+   return hb_itemPutPtrGC( pItem, ppSDL_Texture );
+}
+
+void hb_sdl_texture_ItemClear( PHB_ITEM pItem )
+{
+   SDL_Texture **ppSDL_Texture = ( SDL_Texture ** ) hb_itemGetPtrGC( pItem, &s_sdl_texture_Funcs );
+
+   if( ppSDL_Texture )
+      *ppSDL_Texture = NULL;
+}
+
+void hb_sdl_texture_Return( SDL_Texture *pSDL_Texture )
+{
+   if( pSDL_Texture )
+   {
+      hb_sdl_texture_ItemPut( hb_param( -1, HB_IT_ANY ), pSDL_Texture );
+   }
+   else
+   {
+      hb_ret();
+   }
+}
+
+/* -------------------------------------------------------------------------
 Harbour Implementation Color
 ------------------------------------------------------------------------- */
 static SDL_Color hb_sdl_color_param_array( PHB_ITEM pArray )
@@ -7170,16 +7247,42 @@ HB_FUNC( TTF_RENDERTEXT_LCD_WRAPPED )
 
 }
 
+// SDL_Surface *TTF_RenderText_Shaded( TTF_Font *font, const char *text, size_t length, SDL_Color fg, SDL_Color bg );
 HB_FUNC( TTF_RENDERTEXT_SHADED )
 {
+   PHB_ITEM pArray1;
+   PHB_ITEM pArray2;
 
+   if( hb_param( 1, HB_IT_POINTER ) != NULL && hb_param( 2, HB_IT_STRING ) != NULL && hb_param( 3, HB_IT_NUMINT ) != NULL &&
+      ( pArray1 = hb_param( 4, HB_IT_ARRAY ) ) != NULL && hb_arrayLen( pArray1 ) == 4 &&
+      ( pArray2 = hb_param( 5, HB_IT_ARRAY ) ) != NULL && hb_arrayLen( pArray2 ) == 4 )
+   {
+      SDL_Color fg = hb_sdl_color_param_array( pArray1 );
+      SDL_Color bg = hb_sdl_color_param_array( pArray2 );
+
+      hb_sdl_surface_Return( TTF_RenderText_Shaded( hb_ttf_font_ParamPtr( 1 ), hb_parc( 2 ), ( size_t ) hb_parni( 3 ), fg, bg ) );
+   }
+   else
+   {
+      HB_ERR_ARGS();
+   }
 }
 
-// SDL_Surface * TTF_RenderText_Shaded( TTF_Font *font, const char *text, size_t length, SDL_Color fg, SDL_Color bg );
+// SDL_Surface *TTF_RenderText_Shaded_Wrapped( TTF_Font *font, const char *text, size_t length, SDL_Color fg, SDL_Color bg, int wrap_width );
 HB_FUNC( TTF_RENDERTEXT_SHADED_WRAPPED )
 {
-   if( hb_param( 1, HB_IT_POINTER ) != NULL && hb_param( 2, HB_IT_STRING ) != NULL && hb_param( 3, HB_IT_POINTER ) != NULL )
+   PHB_ITEM pArray1;
+   PHB_ITEM pArray2;
+
+   if( hb_param( 1, HB_IT_POINTER ) != NULL && hb_param( 2, HB_IT_STRING ) != NULL && hb_param( 3, HB_IT_NUMINT ) != NULL &&
+      ( pArray1 = hb_param( 4, HB_IT_ARRAY ) ) != NULL && hb_arrayLen( pArray1 ) == 4 &&
+      ( pArray2 = hb_param( 5, HB_IT_ARRAY ) ) != NULL && hb_arrayLen( pArray2 ) == 4 &&
+      hb_param( 6, HB_IT_NUMINT ) != NULL )
    {
+      SDL_Color fg = hb_sdl_color_param_array( pArray1 );
+      SDL_Color bg = hb_sdl_color_param_array( pArray2 );
+
+      hb_sdl_surface_Return( TTF_RenderText_Shaded_Wrapped( hb_ttf_font_ParamPtr( 1 ), hb_parc( 2 ), ( size_t ) hb_parni( 3 ), fg, bg, hb_parni( 6 ) ) );
    }
    else
    {
