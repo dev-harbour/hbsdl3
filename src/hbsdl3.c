@@ -260,6 +260,71 @@ void hb_sdl_event_Return( SDL_Event *pSDL_Event )
 }
 
 /* -------------------------------------------------------------------------
+Garbage Collector SDL_Surface
+------------------------------------------------------------------------- */
+static HB_GARBAGE_FUNC( hb_sdl_surface_Destructor )
+{
+   SDL_Surface **ppSDL_Surface = ( SDL_Surface ** ) Cargo;
+
+   if( ppSDL_Surface && *ppSDL_Surface )
+   {
+      SDL_DestroySurface( *ppSDL_Surface );
+      *ppSDL_Surface = NULL;
+   }
+}
+
+static const HB_GC_FUNCS s_sdl_surface_font_Funcs =
+{
+   hb_sdl_surface_Destructor,
+   hb_gcDummyMark
+};
+
+SDL_Surface *hb_sdl_surface_ParamPtr( int iParam )
+{
+   SDL_Surface **ppSDL_Surface = ( SDL_Surface ** ) hb_parptrGC( &s_sdl_surface_font_Funcs, iParam );
+
+   if( ppSDL_Surface && *ppSDL_Surface )
+   {
+      return *ppSDL_Surface;
+   }
+   else
+   {
+      HB_ERR_ARGS();
+      return NULL;
+   }
+}
+
+SDL_Surface *hb_sdl_surface_ParamGet( int iParam )
+{
+   SDL_Surface **ppSDL_Surface = ( SDL_Surface ** ) hb_parptrGC( &s_sdl_surface_font_Funcs, iParam );
+
+   return IIF( ppSDL_Surface, *ppSDL_Surface, NULL );
+}
+
+SDL_Surface *hb_sdl_surface_ItemGet( PHB_ITEM pItem )
+{
+   SDL_Surface **ppSDL_Surface = ( SDL_Surface ** ) hb_itemGetPtrGC( pItem, &s_sdl_surface_font_Funcs );
+
+   return IIF( ppSDL_Surface, *ppSDL_Surface, NULL );
+}
+
+PHB_ITEM hb_sdl_surface_ItemPut( PHB_ITEM pItem, SDL_Surface *pSDL_Surface )
+{
+   SDL_Surface **ppSDL_Surface = ( SDL_Surface ** ) hb_gcAllocate( sizeof( SDL_Surface * ), &s_sdl_surface_font_Funcs );
+
+   *ppSDL_Surface = pSDL_Surface;
+   return hb_itemPutPtrGC( pItem, ppSDL_Surface );
+}
+
+void hb_sdl_surface_ItemClear( PHB_ITEM pItem )
+{
+   SDL_Surface **ppSDL_Surface = ( SDL_Surface ** ) hb_itemGetPtrGC( pItem, &s_sdl_surface_font_Funcs );
+
+   if( ppSDL_Surface )
+      *ppSDL_Surface = NULL;
+}
+
+/* -------------------------------------------------------------------------
 Harbour Implementation Color
 ------------------------------------------------------------------------- */
 static struct SDL_Color hb_sdl_color_param_array( PHB_ITEM pArray )
@@ -278,10 +343,10 @@ static PHB_ITEM hb_sdl_color_return_array( const SDL_Color *color )
 {
    PHB_ITEM pArray = hb_itemArrayNew( 4 );
 
-   hb_arraySetND( ( Uint8 ) pArray, 1, color->r );
-   hb_arraySetND( ( Uint8 ) pArray, 2, color->g );
-   hb_arraySetND( ( Uint8 ) pArray, 3, color->b );
-   hb_arraySetND( ( Uint8 ) pArray, 4, color->a );
+   hb_arraySetND( pArray, 1, color->r );
+   hb_arraySetND( pArray, 2, color->g );
+   hb_arraySetND( pArray, 3, color->b );
+   hb_arraySetND( pArray, 4, color->a );
 
    return pArray;
 }
