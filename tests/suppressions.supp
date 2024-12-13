@@ -1,0 +1,12 @@
+{
+   dbus_memory_leak
+   Memcheck:Leak
+   ...
+   obj:/usr/lib/x86_64-linux-gnu/libdbus-1.so.*
+}
+{
+   sdl_memory_leak
+   Memcheck:Leak
+   ...
+   obj:/usr/lib/x86_64-linux-gnu/libSDL3.so.*
+}
