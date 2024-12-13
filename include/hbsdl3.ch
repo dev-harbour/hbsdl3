@@ -665,6 +665,24 @@ SDL3
 #define SDL_KMOD_GUI    hb_BitOr( SDL_KMOD_LGUI, SDL_KMOD_RGUI )
 /* End SDL_keycode_h_ */
 
+/* SDL_surface_h_ */
+#define SDL_SURFACE_PREALLOCATED    0x00000001
+#define SDL_SURFACE_LOCK_NEEDED     0x00000002
+#define SDL_SURFACE_LOCKED          0x00000004
+#define SDL_SURFACE_SIMD_ALIGNED    0x00000008
+
+#define SDL_SCALEMODE_NEAREST 0
+#define SDL_SCALEMODE_LINEAR  1
+
+#define SDL_FLIP_NONE         0
+#define SDL_FLIP_HORIZONTAL   1
+#define SDL_FLIP_VERTICAL     2
+
+#define SDL_PROP_SURFACE_SDR_WHITE_POINT_FLOAT   "SDL.surface.SDR_white_point"
+#define SDL_PROP_SURFACE_HDR_HEADROOM_FLOAT      "SDL.surface.HDR_headroom"
+#define SDL_PROP_SURFACE_TONEMAP_OPERATOR_STRING "SDL.surface.tonemap"
+/* END SDL_surface_h_ */
+
 /* SDL_video_h_ */
 #define SDL_PROP_GLOBAL_VIDEO_WAYLAND_WL_DISPLAY_POINTER "SDL.video.wayland.wl_display"
 
