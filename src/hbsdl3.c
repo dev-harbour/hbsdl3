@@ -273,7 +273,7 @@ static HB_GARBAGE_FUNC( hb_sdl_surface_Destructor )
    }
 }
 
-static const HB_GC_FUNCS s_sdl_surface_font_Funcs =
+static const HB_GC_FUNCS s_sdl_surface_Funcs =
 {
    hb_sdl_surface_Destructor,
    hb_gcDummyMark
@@ -281,7 +281,7 @@ static const HB_GC_FUNCS s_sdl_surface_font_Funcs =
 
 SDL_Surface *hb_sdl_surface_ParamPtr( int iParam )
 {
-   SDL_Surface **ppSDL_Surface = ( SDL_Surface ** ) hb_parptrGC( &s_sdl_surface_font_Funcs, iParam );
+   SDL_Surface **ppSDL_Surface = ( SDL_Surface ** ) hb_parptrGC( &s_sdl_surface_Funcs, iParam );
 
    if( ppSDL_Surface && *ppSDL_Surface )
    {
@@ -296,21 +296,21 @@ SDL_Surface *hb_sdl_surface_ParamPtr( int iParam )
 
 SDL_Surface *hb_sdl_surface_ParamGet( int iParam )
 {
-   SDL_Surface **ppSDL_Surface = ( SDL_Surface ** ) hb_parptrGC( &s_sdl_surface_font_Funcs, iParam );
+   SDL_Surface **ppSDL_Surface = ( SDL_Surface ** ) hb_parptrGC( &s_sdl_surface_Funcs, iParam );
 
    return IIF( ppSDL_Surface, *ppSDL_Surface, NULL );
 }
 
 SDL_Surface *hb_sdl_surface_ItemGet( PHB_ITEM pItem )
 {
-   SDL_Surface **ppSDL_Surface = ( SDL_Surface ** ) hb_itemGetPtrGC( pItem, &s_sdl_surface_font_Funcs );
+   SDL_Surface **ppSDL_Surface = ( SDL_Surface ** ) hb_itemGetPtrGC( pItem, &s_sdl_surface_Funcs );
 
    return IIF( ppSDL_Surface, *ppSDL_Surface, NULL );
 }
 
 PHB_ITEM hb_sdl_surface_ItemPut( PHB_ITEM pItem, SDL_Surface *pSDL_Surface )
 {
-   SDL_Surface **ppSDL_Surface = ( SDL_Surface ** ) hb_gcAllocate( sizeof( SDL_Surface * ), &s_sdl_surface_font_Funcs );
+   SDL_Surface **ppSDL_Surface = ( SDL_Surface ** ) hb_gcAllocate( sizeof( SDL_Surface * ), &s_sdl_surface_Funcs );
 
    *ppSDL_Surface = pSDL_Surface;
    return hb_itemPutPtrGC( pItem, ppSDL_Surface );
@@ -318,7 +318,7 @@ PHB_ITEM hb_sdl_surface_ItemPut( PHB_ITEM pItem, SDL_Surface *pSDL_Surface )
 
 void hb_sdl_surface_ItemClear( PHB_ITEM pItem )
 {
-   SDL_Surface **ppSDL_Surface = ( SDL_Surface ** ) hb_itemGetPtrGC( pItem, &s_sdl_surface_font_Funcs );
+   SDL_Surface **ppSDL_Surface = ( SDL_Surface ** ) hb_itemGetPtrGC( pItem, &s_sdl_surface_Funcs );
 
    if( ppSDL_Surface )
       *ppSDL_Surface = NULL;
@@ -339,7 +339,7 @@ void hb_sdl_surface_Return( SDL_Surface *pSDL_Surface )
 /* -------------------------------------------------------------------------
 Harbour Implementation Color
 ------------------------------------------------------------------------- */
-static struct SDL_Color hb_sdl_color_param_array( PHB_ITEM pArray )
+static SDL_Color hb_sdl_color_param_array( PHB_ITEM pArray )
 {
    SDL_Color color;
 
@@ -363,7 +363,7 @@ static PHB_ITEM __attribute__( ( unused ) ) hb_sdl_color_return_array( const SDL
    return pArray;
 }
 
-static struct SDL_FColor __attribute__( ( unused ) ) hb_sdl_fcolor_param_array( PHB_ITEM pArray )
+static SDL_FColor __attribute__( ( unused ) ) hb_sdl_fcolor_param_array( PHB_ITEM pArray )
 {
    SDL_FColor color;
 
@@ -7175,9 +7175,16 @@ HB_FUNC( TTF_RENDERTEXT_SHADED )
 
 }
 
+// SDL_Surface * TTF_RenderText_Shaded( TTF_Font *font, const char *text, size_t length, SDL_Color fg, SDL_Color bg );
 HB_FUNC( TTF_RENDERTEXT_SHADED_WRAPPED )
 {
-
+   if( hb_param( 1, HB_IT_POINTER ) != NULL && hb_param( 2, HB_IT_STRING ) != NULL && hb_param( 3, HB_IT_POINTER ) != NULL )
+   {
+   }
+   else
+   {
+      HB_ERR_ARGS();
+   }
 }
 
 HB_FUNC( TTF_RENDERTEXT_SOLID )
