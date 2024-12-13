@@ -351,7 +351,7 @@ static struct SDL_Color hb_sdl_color_param_array( PHB_ITEM pArray )
    return color;
 }
 
-static PHB_ITEM hb_sdl_color_return_array( const SDL_Color *color )
+static PHB_ITEM __attribute__( ( unused ) ) hb_sdl_color_return_array( const SDL_Color *color )
 {
    PHB_ITEM pArray = hb_itemArrayNew( 4 );
 
@@ -7094,9 +7094,21 @@ HB_FUNC( TTF_QUIT )
 
 }
 
+// SDL_Surface *TTF_RenderGlyph_Blended( TTF_Font *font, Uint32 ch, SDL_Color fg );
 HB_FUNC( TTF_RENDERGLYPH_BLENDED )
 {
+   PHB_ITEM pArray;
 
+   if( hb_param( 1, HB_IT_POINTER ) != NULL && hb_param( 2, HB_IT_NUMERIC ) != NULL && ( pArray = hb_param( 3, HB_IT_ARRAY ) ) != NULL && hb_arrayLen( pArray ) == 4 )
+   {
+      SDL_Color color = hb_sdl_color_param_array( pArray );
+
+      hb_sdl_surface_Return( TTF_RenderGlyph_Blended( hb_ttf_font_ParamPtr( 1 ), ( Uint32 ) hb_parni( 2 ), color ) );
+   }
+   else
+   {
+      HB_ERR_ARGS();
+   }
 }
 
 HB_FUNC( TTF_RENDERGLYPH_LCD )
