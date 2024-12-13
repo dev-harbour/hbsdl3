@@ -324,6 +324,18 @@ void hb_sdl_surface_ItemClear( PHB_ITEM pItem )
       *ppSDL_Surface = NULL;
 }
 
+void hb_sdl_surface_Return( SDL_Surface *pSDL_Surface )
+{
+   if( pSDL_Surface )
+   {
+      hb_sdl_surface_ItemPut( hb_param( -1, HB_IT_ANY ), pSDL_Surface );
+   }
+   else
+   {
+      hb_ret();
+   }
+}
+
 /* -------------------------------------------------------------------------
 Harbour Implementation Color
 ------------------------------------------------------------------------- */
