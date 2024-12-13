@@ -1356,7 +1356,7 @@ HB_FUNC( SDL_CREATETHREADWITHPROPERTIES )
 // SDL_Window *SDL_CreateWindow( const char *title, int w, int h, SDL_WindowFlags flags );
 HB_FUNC( SDL_CREATEWINDOW )
 {
-   if( hb_param( 1, HB_IT_STRING ) != NULL && hb_param( 2, HB_IT_NUMERIC ) != NULL && hb_param( 3, HB_IT_NUMERIC ) != NULL && hb_param( 4, HB_IT_NUMERIC ) != NULL )
+   if( hb_param( 1, HB_IT_STRING ) != NULL && hb_param( 2, HB_IT_INTEGER ) != NULL && hb_param( 3, HB_IT_INTEGER ) != NULL && hb_param( 4, HB_IT_NUMINT ) != NULL )
    {
       hb_sdl_window_Return( SDL_CreateWindow( hb_parc( 1 ), hb_parni( 2 ), hb_parni( 3 ), hb_parni( 4 ) ) );
    }
@@ -1389,7 +1389,7 @@ HB_FUNC( SDL_DATETIMETOTIME )
 // void SDL_Delay( Uint32 ms );
 HB_FUNC( SDL_DELAY )
 {
-   if( hb_param( 1, HB_IT_NUMERIC ) != NULL )
+   if( hb_param( 1, HB_IT_NUMINT ) != NULL )
    {
       SDL_Delay( hb_parni( 1 ) );
    }
@@ -3953,7 +3953,7 @@ HB_FUNC( SDL_ICONV_STRING )
 // bool SDL_Init( SDL_InitFlags flags );
 HB_FUNC( SDL_INIT )
 {
-   if( hb_param( 1, HB_IT_NUMERIC ) != NULL )
+   if( hb_param( 1, HB_IT_NUMINT ) != NULL )
    {
       hb_retl( SDL_Init( ( Uint32 ) hb_parni( 1 ) ) );
    }
@@ -5653,10 +5653,10 @@ HB_FUNC( SDL_SETRENDERDRAWBLENDMODE )
 HB_FUNC( SDL_SETRENDERDRAWCOLOR )
 {
    if( hb_param( 1, HB_IT_POINTER ) != NULL &&
-       hb_param( 2, HB_IT_NUMERIC ) != NULL &&
-       hb_param( 3, HB_IT_NUMERIC ) != NULL &&
-       hb_param( 4, HB_IT_NUMERIC ) != NULL &&
-       hb_param( 5, HB_IT_NUMERIC ) != NULL )
+       hb_param( 2, HB_IT_INTEGER ) != NULL &&
+       hb_param( 3, HB_IT_INTEGER ) != NULL &&
+       hb_param( 4, HB_IT_INTEGER ) != NULL &&
+       hb_param( 5, HB_IT_INTEGER ) != NULL )
    {
       SDL_Renderer *pRenderer = hb_sdl_renderer_ParamPtr( 1 );
       int r = ( Uint8 ) hb_parni( 2 );
@@ -5873,7 +5873,7 @@ HB_FUNC( SDL_SETWINDOWKEYBOARDGRAB )
 // bool SDL_SetWindowMaximumSize( SDL_Window *window, int max_w, int max_h );
 HB_FUNC( SDL_SETWINDOWMAXIMUMSIZE )
 {
-   if( hb_param( 1, HB_IT_POINTER ) != NULL && hb_param( 2, HB_IT_NUMERIC ) != NULL && hb_param( 3, HB_IT_NUMERIC ) != NULL )
+   if( hb_param( 1, HB_IT_POINTER ) != NULL && hb_param( 2, HB_IT_INTEGER ) != NULL && hb_param( 3, HB_IT_INTEGER ) != NULL )
    {
       hb_retl( SDL_SetWindowMaximumSize( hb_sdl_window_ParamPtr( 1 ), hb_parni( 2 ), hb_parni( 3 ) ) );
    }
@@ -5886,7 +5886,7 @@ HB_FUNC( SDL_SETWINDOWMAXIMUMSIZE )
 // bool SDL_SetWindowMinimumSize( SDL_Window *window, int min_w, int min_h );
 HB_FUNC( SDL_SETWINDOWMINIMUMSIZE )
 {
-   if( hb_param( 1, HB_IT_POINTER ) != NULL && hb_param( 2, HB_IT_NUMERIC ) != NULL && hb_param( 3, HB_IT_NUMERIC ) != NULL )
+   if( hb_param( 1, HB_IT_POINTER ) != NULL && hb_param( 2, HB_IT_INTEGER ) != NULL && hb_param( 3, HB_IT_INTEGER ) != NULL )
    {
       hb_retl( SDL_SetWindowMinimumSize( hb_sdl_window_ParamPtr( 1 ), hb_parni( 2 ), hb_parni( 3 ) ) );
    }
@@ -5924,7 +5924,7 @@ HB_FUNC( SDL_SETWINDOWPARENT )
 bool SDL_SetWindowPosition( SDL_Window *window, int x, int y );
 HB_FUNC( SDL_SETWINDOWPOSITION )
 {
-   if( hb_param( 1, HB_IT_POINTER ) != NULL && hb_param( 2, HB_IT_NUMERIC ) != NULL && hb_param( 3, HB_IT_NUMERIC ) != NULL )
+   if( hb_param( 1, HB_IT_POINTER ) != NULL && hb_param( 2, HB_IT_INTEGER ) != NULL && hb_param( 3, HB_IT_INTEGER ) != NULL )
    {
       hb_retl( SDL_SetWindowPosition( hb_sdl_window_ParamPtr( 1 ), hb_parni( 2 ), hb_parni( 3 ) ) );
    }
@@ -5952,7 +5952,7 @@ HB_FUNC( SDL_SETWINDOWSHAPE )
 // bool SDL_SetWindowSize( SDL_Window *window, int w, int h );
 HB_FUNC( SDL_SETWINDOWSIZE )
 {
-   if( hb_param( 1, HB_IT_POINTER ) != NULL && hb_param( 2, HB_IT_NUMERIC ) != NULL && hb_param( 3, HB_IT_NUMERIC ) != NULL )
+   if( hb_param( 1, HB_IT_POINTER ) != NULL && hb_param( 2, HB_IT_INTEGER ) != NULL && hb_param( 3, HB_IT_INTEGER ) != NULL )
    {
       hb_retl( SDL_SetWindowSize( hb_sdl_window_ParamPtr( 1 ), hb_parni( 2 ), hb_parni( 3 ) ) );
    }
@@ -6577,7 +6577,7 @@ HB_FUNC( SDL_WAITEVENT )
 // bool SDL_WaitEventTimeout( SDL_Event *event, Sint32 timeoutMS );
 HB_FUNC( SDL_WAITEVENTTIMEOUT )
 {
-   if( hb_param( 1, HB_IT_BYREF ) != NULL && hb_param( 2, HB_IT_NUMERIC ) != NULL )
+   if( hb_param( 1, HB_IT_BYREF ) != NULL && hb_param( 2, HB_IT_NUMINT ) != NULL )
    {
       SDL_Event *pEvent = ( SDL_Event * ) hb_xgrab( sizeof( SDL_Event ) );
 
@@ -7200,7 +7200,7 @@ HB_FUNC( TTF_RENDERGLYPH_BLENDED )
 {
    PHB_ITEM pArray;
 
-   if( hb_param( 1, HB_IT_POINTER ) != NULL && hb_param( 2, HB_IT_NUMERIC ) != NULL && ( pArray = hb_param( 3, HB_IT_ARRAY ) ) != NULL && hb_arrayLen( pArray ) == 4 )
+   if( hb_param( 1, HB_IT_POINTER ) != NULL && hb_param( 2, HB_IT_NUMINT ) != NULL && ( pArray = hb_param( 3, HB_IT_ARRAY ) ) != NULL && hb_arrayLen( pArray ) == 4 )
    {
       SDL_Color color = hb_sdl_color_param_array( pArray );
 
@@ -7277,7 +7277,7 @@ HB_FUNC( TTF_RENDERTEXT_SHADED_WRAPPED )
    if( hb_param( 1, HB_IT_POINTER ) != NULL && hb_param( 2, HB_IT_STRING ) != NULL && hb_param( 3, HB_IT_NUMINT ) != NULL &&
       ( pArray1 = hb_param( 4, HB_IT_ARRAY ) ) != NULL && hb_arrayLen( pArray1 ) == 4 &&
       ( pArray2 = hb_param( 5, HB_IT_ARRAY ) ) != NULL && hb_arrayLen( pArray2 ) == 4 &&
-      hb_param( 6, HB_IT_NUMINT ) != NULL )
+      hb_param( 6, HB_IT_INTEGER ) != NULL )
    {
       SDL_Color fg = hb_sdl_color_param_array( pArray1 );
       SDL_Color bg = hb_sdl_color_param_array( pArray2 );
