@@ -11,14 +11,12 @@ static HB_GARBAGE_FUNC( hb_sdl_window_Destructor )
 {
    SDL_Window **ppSDL_Window = ( SDL_Window ** ) Cargo;
 
-   // Zwalnianie okna, jeśli jeszcze nie zostało zwolnione
    if( ppSDL_Window && *ppSDL_Window )
    {
       SDL_DestroyWindow( *ppSDL_Window );
       *ppSDL_Window = NULL;
    }
 
-   // Zamknięcie podsystemów SDL
    Uint32 subsystems = SDL_WasInit( 0 );
    Uint32 sdlFlags[] =
    {
@@ -40,7 +38,6 @@ static HB_GARBAGE_FUNC( hb_sdl_window_Destructor )
       }
    }
 
-   // Ostateczne zamknięcie SDL
    SDL_Quit();
 }
 
@@ -1501,9 +1498,27 @@ HB_FUNC( SDL_DESTROYSEMAPHORE )
 
 }
 
+// void SDL_DestroySurface( SDL_Surface *surface );
 HB_FUNC( SDL_DESTROYSURFACE )
 {
+   if( hb_param( 1, HB_IT_POINTER ) != NULL )
+   {
+      SDL_Surface **ppSDL_Surface = ( SDL_Surface ** ) hb_parptrGC( &s_gc_sdl_surface_Funcs, 1 );
 
+      if( ppSDL_Surface && *ppSDL_Surface )
+      {
+         SDL_DestroySurface( *ppSDL_Surface );
+         *ppSDL_Surface = NULL;
+      }
+      else
+      {
+         hb_retc( "Surface already destroyed or invalid pointer." );
+      }
+   }
+   else
+   {
+      HB_ERR_ARGS();
+   }
 }
 
 // void SDL_DestroyTexture( SDL_Texture *texture );
