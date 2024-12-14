@@ -277,7 +277,7 @@ static HB_GARBAGE_FUNC( hb_sdl_surface_Destructor )
    }
 }
 
-static const HB_GC_FUNCS s_sdl_surface_Funcs =
+static const HB_GC_FUNCS s_gc_sdl_surface_Funcs =
 {
    hb_sdl_surface_Destructor,
    hb_gcDummyMark
@@ -285,7 +285,7 @@ static const HB_GC_FUNCS s_sdl_surface_Funcs =
 
 SDL_Surface *hb_sdl_surface_ParamPtr( int iParam )
 {
-   SDL_Surface **ppSDL_Surface = ( SDL_Surface ** ) hb_parptrGC( &s_sdl_surface_Funcs, iParam );
+   SDL_Surface **ppSDL_Surface = ( SDL_Surface ** ) hb_parptrGC( &s_gc_sdl_surface_Funcs, iParam );
 
    if( ppSDL_Surface && *ppSDL_Surface )
    {
@@ -300,21 +300,21 @@ SDL_Surface *hb_sdl_surface_ParamPtr( int iParam )
 
 SDL_Surface *hb_sdl_surface_ParamGet( int iParam )
 {
-   SDL_Surface **ppSDL_Surface = ( SDL_Surface ** ) hb_parptrGC( &s_sdl_surface_Funcs, iParam );
+   SDL_Surface **ppSDL_Surface = ( SDL_Surface ** ) hb_parptrGC( &s_gc_sdl_surface_Funcs, iParam );
 
    return IIF( ppSDL_Surface, *ppSDL_Surface, NULL );
 }
 
 SDL_Surface *hb_sdl_surface_ItemGet( PHB_ITEM pItem )
 {
-   SDL_Surface **ppSDL_Surface = ( SDL_Surface ** ) hb_itemGetPtrGC( pItem, &s_sdl_surface_Funcs );
+   SDL_Surface **ppSDL_Surface = ( SDL_Surface ** ) hb_itemGetPtrGC( pItem, &s_gc_sdl_surface_Funcs );
 
    return IIF( ppSDL_Surface, *ppSDL_Surface, NULL );
 }
 
 PHB_ITEM hb_sdl_surface_ItemPut( PHB_ITEM pItem, SDL_Surface *pSDL_Surface )
 {
-   SDL_Surface **ppSDL_Surface = ( SDL_Surface ** ) hb_gcAllocate( sizeof( SDL_Surface * ), &s_sdl_surface_Funcs );
+   SDL_Surface **ppSDL_Surface = ( SDL_Surface ** ) hb_gcAllocate( sizeof( SDL_Surface * ), &s_gc_sdl_surface_Funcs );
 
    *ppSDL_Surface = pSDL_Surface;
    return hb_itemPutPtrGC( pItem, ppSDL_Surface );
@@ -322,7 +322,7 @@ PHB_ITEM hb_sdl_surface_ItemPut( PHB_ITEM pItem, SDL_Surface *pSDL_Surface )
 
 void hb_sdl_surface_ItemClear( PHB_ITEM pItem )
 {
-   SDL_Surface **ppSDL_Surface = ( SDL_Surface ** ) hb_itemGetPtrGC( pItem, &s_sdl_surface_Funcs );
+   SDL_Surface **ppSDL_Surface = ( SDL_Surface ** ) hb_itemGetPtrGC( pItem, &s_gc_sdl_surface_Funcs );
 
    if( ppSDL_Surface )
       *ppSDL_Surface = NULL;
@@ -354,7 +354,7 @@ static HB_GARBAGE_FUNC( hb_sdl_texture_Destructor )
    }
 }
 
-static const HB_GC_FUNCS s_sdl_texture_Funcs =
+static const HB_GC_FUNCS s_gc_sdl_texture_Funcs =
 {
    hb_sdl_texture_Destructor,
    hb_gcDummyMark
@@ -362,7 +362,7 @@ static const HB_GC_FUNCS s_sdl_texture_Funcs =
 
 SDL_Texture *hb_sdl_texture_ParamPtr( int iParam )
 {
-   SDL_Texture **ppSDL_Texture = ( SDL_Texture ** ) hb_parptrGC( &s_sdl_texture_Funcs, iParam );
+   SDL_Texture **ppSDL_Texture = ( SDL_Texture ** ) hb_parptrGC( &s_gc_sdl_texture_Funcs, iParam );
 
    if( ppSDL_Texture && *ppSDL_Texture )
    {
@@ -377,21 +377,21 @@ SDL_Texture *hb_sdl_texture_ParamPtr( int iParam )
 
 SDL_Texture *hb_sdl_texture_ParamGet( int iParam )
 {
-   SDL_Texture **ppSDL_Texture = ( SDL_Texture ** ) hb_parptrGC( &s_sdl_texture_Funcs, iParam );
+   SDL_Texture **ppSDL_Texture = ( SDL_Texture ** ) hb_parptrGC( &s_gc_sdl_texture_Funcs, iParam );
 
    return IIF( ppSDL_Texture, *ppSDL_Texture, NULL );
 }
 
 SDL_Texture *hb_sdl_texture_ItemGet( PHB_ITEM pItem )
 {
-   SDL_Texture **ppSDL_Texture = ( SDL_Texture ** ) hb_itemGetPtrGC( pItem, &s_sdl_texture_Funcs );
+   SDL_Texture **ppSDL_Texture = ( SDL_Texture ** ) hb_itemGetPtrGC( pItem, &s_gc_sdl_texture_Funcs );
 
    return IIF( ppSDL_Texture, *ppSDL_Texture, NULL );
 }
 
 PHB_ITEM hb_sdl_texture_ItemPut( PHB_ITEM pItem, SDL_Texture *pSDL_Texture )
 {
-   SDL_Texture **ppSDL_Texture = ( SDL_Texture ** ) hb_gcAllocate( sizeof( SDL_Texture * ), &s_sdl_texture_Funcs );
+   SDL_Texture **ppSDL_Texture = ( SDL_Texture ** ) hb_gcAllocate( sizeof( SDL_Texture * ), &s_gc_sdl_texture_Funcs );
 
    *ppSDL_Texture = pSDL_Texture;
    return hb_itemPutPtrGC( pItem, ppSDL_Texture );
@@ -399,7 +399,7 @@ PHB_ITEM hb_sdl_texture_ItemPut( PHB_ITEM pItem, SDL_Texture *pSDL_Texture )
 
 void hb_sdl_texture_ItemClear( PHB_ITEM pItem )
 {
-   SDL_Texture **ppSDL_Texture = ( SDL_Texture ** ) hb_itemGetPtrGC( pItem, &s_sdl_texture_Funcs );
+   SDL_Texture **ppSDL_Texture = ( SDL_Texture ** ) hb_itemGetPtrGC( pItem, &s_gc_sdl_texture_Funcs );
 
    if( ppSDL_Texture )
       *ppSDL_Texture = NULL;
@@ -1506,9 +1506,27 @@ HB_FUNC( SDL_DESTROYSURFACE )
 
 }
 
+// void SDL_DestroyTexture( SDL_Texture *texture );
 HB_FUNC( SDL_DESTROYTEXTURE )
 {
+   if( hb_param( 1, HB_IT_POINTER ) != NULL )
+   {
+      SDL_Texture **ppSDL_Texture = ( SDL_Texture ** ) hb_parptrGC( &s_gc_sdl_texture_Funcs, 1 );
 
+      if( ppSDL_Texture && *ppSDL_Texture )
+      {
+         SDL_DestroyTexture( *ppSDL_Texture );
+         *ppSDL_Texture = NULL;
+      }
+      else
+      {
+         hb_retc( "Texture already destroyed or invalid pointer." );
+      }
+   }
+   else
+   {
+      HB_ERR_ARGS();
+   }
 }
 
 // void SDL_DestroyWindow( SDL_Window *window );
