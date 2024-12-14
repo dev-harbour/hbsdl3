@@ -1471,12 +1471,19 @@ HB_FUNC( SDL_DESTROYPROPERTIES )
 // void SDL_DestroyRenderer( SDL_Renderer *renderer );
 HB_FUNC( SDL_DESTROYRENDERER )
 {
-   SDL_Renderer **ppSDL_Renderer = ( SDL_Renderer ** ) hb_parptrGC( &s_gc_sdl_renderer_Funcs, 1 );
-
-   if( ppSDL_Renderer && *ppSDL_Renderer )
+   if( hb_param( 1, HB_IT_POINTER ) != NULL )
    {
-      SDL_DestroyRenderer( *ppSDL_Renderer );
-      *ppSDL_Renderer = NULL;
+      SDL_Renderer **ppSDL_Renderer = ( SDL_Renderer ** ) hb_parptrGC( &s_gc_sdl_renderer_Funcs, 1 );
+
+      if( ppSDL_Renderer && *ppSDL_Renderer )
+      {
+         SDL_DestroyRenderer( *ppSDL_Renderer );
+         *ppSDL_Renderer = NULL;
+      }
+      else
+      {
+         hb_retc( "Renderer already destroyed or invalid pointer." );
+      }
    }
    else
    {
@@ -1507,12 +1514,19 @@ HB_FUNC( SDL_DESTROYTEXTURE )
 // void SDL_DestroyWindow( SDL_Window *window );
 HB_FUNC( SDL_DESTROYWINDOW )
 {
-   SDL_Window **ppSDL_Window = ( SDL_Window ** ) hb_parptrGC( &s_gc_sdl_window_Funcs, 1 );
-
-   if( ppSDL_Window && *ppSDL_Window )
+   if( hb_param( 1, HB_IT_POINTER ) != NULL )
    {
-      SDL_DestroyWindow( *ppSDL_Window );
-      *ppSDL_Window = NULL;
+      SDL_Window **ppSDL_Window = ( SDL_Window ** ) hb_parptrGC( &s_gc_sdl_window_Funcs, 1 );
+
+      if( ppSDL_Window && *ppSDL_Window )
+      {
+         SDL_DestroyWindow( *ppSDL_Window );
+         *ppSDL_Window = NULL;
+      }
+      else
+      {
+         hb_retc( "Window already destroyed or invalid pointer." );
+      }
    }
    else
    {
