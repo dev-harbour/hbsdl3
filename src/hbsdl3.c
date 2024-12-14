@@ -218,14 +218,14 @@ SDL_Event *hb_sdl_event_ParamGet( int iParam )
 {
    SDL_Event **ppSDL_Event = ( SDL_Event ** ) hb_parptrGC( &s_gc_sdl_event_Funcs, iParam );
 
-   return ppSDL_Event ? *ppSDL_Event : NULL;
+   return IIF( ppSDL_Event, *ppSDL_Event, NULL );
 }
 
 SDL_Event *hb_sdl_event_ItemGet( PHB_ITEM pItem )
 {
    SDL_Event **ppSDL_Event = ( SDL_Event ** ) hb_itemGetPtrGC( pItem, &s_gc_sdl_event_Funcs );
 
-   return ppSDL_Event ? *ppSDL_Event : NULL;
+   return IIF( ppSDL_Event, *ppSDL_Event, NULL );
 }
 
 PHB_ITEM hb_sdl_event_ItemPut( PHB_ITEM pItem, SDL_Event *pSDL_Event )
