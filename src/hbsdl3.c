@@ -11,33 +11,37 @@ static HB_GARBAGE_FUNC( hb_sdl_window_Destructor )
 {
    SDL_Window **ppSDL_Window = ( SDL_Window ** ) Cargo;
 
+   // Zwalnianie okna, jeśli jeszcze nie zostało zwolnione
    if( ppSDL_Window && *ppSDL_Window )
    {
       SDL_DestroyWindow( *ppSDL_Window );
-
-      Uint32 subsystems = SDL_WasInit( 0 );
-      Uint32 sdlFlags[] =
-      {
-         SDL_INIT_AUDIO,
-         SDL_INIT_VIDEO ,
-         SDL_INIT_JOYSTICK,
-         SDL_INIT_HAPTIC,
-         SDL_INIT_GAMEPAD,
-         SDL_INIT_EVENTS,
-         SDL_INIT_SENSOR,
-         SDL_INIT_CAMERA
-      };
-
-      for( size_t i = 0; i < sizeof( sdlFlags ) / sizeof( sdlFlags[ 0 ] ); i++ )
-      {
-         if( subsystems & sdlFlags[ i ] )
-         {
-            SDL_QuitSubSystem( sdlFlags[ i ] );
-           }
-      }
-      SDL_Quit();
       *ppSDL_Window = NULL;
    }
+
+   // Zamknięcie podsystemów SDL
+   Uint32 subsystems = SDL_WasInit( 0 );
+   Uint32 sdlFlags[] =
+   {
+      SDL_INIT_AUDIO,
+      SDL_INIT_VIDEO ,
+      SDL_INIT_JOYSTICK,
+      SDL_INIT_HAPTIC,
+      SDL_INIT_GAMEPAD,
+      SDL_INIT_EVENTS,
+      SDL_INIT_SENSOR,
+      SDL_INIT_CAMERA
+   };
+
+   for( size_t i = 0; i < sizeof( sdlFlags ) / sizeof( sdlFlags[ 0 ] ); i++ )
+   {
+      if( subsystems & sdlFlags[ i ] )
+      {
+         SDL_QuitSubSystem( sdlFlags[ i ] );
+      }
+   }
+
+   // Ostateczne zamknięcie SDL
+   SDL_Quit();
 }
 
 static const HB_GC_FUNCS s_gc_sdl_window_Funcs =
@@ -1464,9 +1468,20 @@ HB_FUNC( SDL_DESTROYPROPERTIES )
 
 }
 
+// void SDL_DestroyRenderer( SDL_Renderer *renderer );
 HB_FUNC( SDL_DESTROYRENDERER )
 {
+   SDL_Renderer **ppSDL_Renderer = ( SDL_Renderer ** ) hb_parptrGC( &s_gc_sdl_renderer_Funcs, 1 );
 
+   if( ppSDL_Renderer && *ppSDL_Renderer )
+   {
+      SDL_DestroyRenderer( *ppSDL_Renderer );
+      *ppSDL_Renderer = NULL;
+   }
+   else
+   {
+      HB_ERR_ARGS();
+   }
 }
 
 HB_FUNC( SDL_DESTROYRWLOCK )
@@ -1489,9 +1504,20 @@ HB_FUNC( SDL_DESTROYTEXTURE )
 
 }
 
+// void SDL_DestroyWindow( SDL_Window *window );
 HB_FUNC( SDL_DESTROYWINDOW )
 {
+   SDL_Window **ppSDL_Window = ( SDL_Window ** ) hb_parptrGC( &s_gc_sdl_window_Funcs, 1 );
 
+   if( ppSDL_Window && *ppSDL_Window )
+   {
+      SDL_DestroyWindow( *ppSDL_Window );
+      *ppSDL_Window = NULL;
+   }
+   else
+   {
+      HB_ERR_ARGS();
+   }
 }
 
 HB_FUNC( SDL_DESTROYWINDOWSURFACE )
@@ -7242,6 +7268,7 @@ HB_FUNC( TTF_RENDERTEXT_LCD )
 
 }
 
+// SDL_Surface *TTF_RenderText_LCD_Wrapped( TTF_Font *font, const char *text, size_t length, SDL_Color fg, SDL_Color bg, int wrap_width );
 HB_FUNC( TTF_RENDERTEXT_LCD_WRAPPED )
 {
 
