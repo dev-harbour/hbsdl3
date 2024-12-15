@@ -210,9 +210,17 @@ HB_FUNC( TTF_GETFONTKERNING )
 
 }
 
+// int TTF_GetFontLineSkip( const TTF_Font *font );
 HB_FUNC( TTF_GETFONTLINESKIP )
 {
-
+   if( hb_param( 1, HB_IT_POINTER ) != NULL )
+   {
+      hb_retni( TTF_GetFontLineSkip( hb_ttf_font_ParamPtr( 1 ) ) );
+   }
+   else
+   {
+      HB_ERR_ARGS();
+   }
 }
 
 HB_FUNC( TTF_GETFONTOUTLINE )
@@ -381,9 +389,23 @@ HB_FUNC( TTF_INSERTTEXTSTRING )
 
 }
 
+// bool TTF_MeasureString( TTF_Font *font, const char *text, size_t length, int max_width, int *measured_width, size_t *measured_length );
 HB_FUNC( TTF_MEASURESTRING )
 {
+   if( hb_param( 1, HB_IT_POINTER ) != NULL && hb_param( 2, HB_IT_STRING ) != NULL && hb_param( 3, HB_IT_NUMINT ) != NULL && hb_param( 4, HB_IT_INTEGER ) != NULL )
+   {
+      /* TODO */
+      int measured_width = 0;
+      size_t measured_length = 0;
 
+      hb_retl( TTF_MeasureString( hb_ttf_font_ParamPtr( 1 ), hb_parc( 2 ), hb_parni( 3 ), hb_parni( 4 ), &measured_width, &measured_length ) );
+      hb_storni( measured_width, 5 );
+      hb_storns( measured_length, 6 );
+   }
+   else
+   {
+      HB_ERR_ARGS();
+   }
 }
 
 // TTF_Font *TTF_OpenFont( const char *file, float ptsize );
