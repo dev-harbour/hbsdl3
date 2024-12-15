@@ -3354,9 +3354,37 @@ HB_FUNC( SDL_GETWINDOWPIXELFORMAT )
 
 }
 
+// bool SDL_GetWindowPosition( SDL_Window *window, int *x, int *y );
 HB_FUNC( SDL_GETWINDOWPOSITION )
 {
-
+   if( hb_param( 1, HB_IT_POINTER ) != NULL &&
+       hb_param( 2, HB_IT_BYREF ) != NULL &&
+       hb_param( 3, HB_IT_BYREF ) != NULL )
+   {
+      SDL_Window *pWindow = hb_sdl_window_ParamPtr( 1 );
+      if( pWindow != NULL )
+      {
+         int w = 0, h = 0;
+         if( SDL_GetWindowPosition( pWindow, &w, &h ) )
+         {
+            hb_storni( w, 2 );
+            hb_storni( h, 3 );
+            hb_retl( HB_TRUE );
+         }
+         else
+         {
+            hb_retl( HB_FALSE );
+         }
+      }
+      else
+      {
+         hb_retl( HB_FALSE );
+      }
+   }
+   else
+   {
+      HB_ERR_ARGS();
+   }
 }
 
 HB_FUNC( SDL_GETWINDOWPROPERTIES )
@@ -3379,9 +3407,37 @@ HB_FUNC( SDL_GETWINDOWSAFEAREA )
 
 }
 
+// bool SDL_GetWindowSize( SDL_Window *window, int *w, int *h );
 HB_FUNC( SDL_GETWINDOWSIZE )
 {
-
+   if( hb_param( 1, HB_IT_POINTER ) != NULL &&
+       hb_param( 2, HB_IT_BYREF ) != NULL &&
+       hb_param( 3, HB_IT_BYREF ) != NULL )
+   {
+      SDL_Window *pWindow = hb_sdl_window_ParamPtr( 1 );
+      if( pWindow != NULL )
+      {
+         int w = 0, h = 0;
+         if( SDL_GetWindowSize( pWindow, &w, &h ) )
+         {
+            hb_storni( w, 2 );
+            hb_storni( h, 3 );
+            hb_retl( HB_TRUE );
+         }
+         else
+         {
+            hb_retl( HB_FALSE );
+         }
+      }
+      else
+      {
+         hb_retl( HB_FALSE );
+      }
+   }
+   else
+   {
+      HB_ERR_ARGS();
+   }
 }
 
 HB_FUNC( SDL_GETWINDOWSIZEINPIXELS )
