@@ -59,6 +59,9 @@ extern HB_EXPORT PHB_ITEM   hb_sdl_color_return_array( const SDL_Color *color );
 extern HB_EXPORT SDL_FColor hb_sdl_fcolor_param_array( PHB_ITEM pArray );
 extern HB_EXPORT PHB_ITEM   hb_sdl_fcolor_return_array( const SDL_FColor *fcolor );
 
+extern HB_EXPORT SDL_FRect hb_sdl_frect_param_array( PHB_ITEM pArray );
+extern HB_EXPORT PHB_ITEM  hb_sdl_frect_return_array( const SDL_FRect *frect );
+
 extern HB_EXPORT TTF_Font *hb_ttf_font_ParamPtr( int iParam );
 extern HB_EXPORT TTF_Font *hb_ttf_font_ParamGet( int iParam );
 extern HB_EXPORT TTF_Font *hb_ttf_font_ItemGet( PHB_ITEM pItem );
