@@ -3449,9 +3449,37 @@ HB_FUNC( SDL_GETWINDOWSIZE )
    }
 }
 
+// bool SDL_GetWindowSizeInPixels(SDL_Window *window, int *w, int *h);
 HB_FUNC( SDL_GETWINDOWSIZEINPIXELS )
 {
-
+   if( hb_param( 1, HB_IT_POINTER ) != NULL &&
+       hb_param( 2, HB_IT_BYREF ) != NULL &&
+       hb_param( 3, HB_IT_BYREF ) != NULL )
+   {
+      SDL_Window *pWindow = hb_sdl_window_ParamPtr( 1 );
+      if( pWindow != NULL )
+      {
+         int w = 0, h = 0;
+         if( SDL_GetWindowSizeInPixels( pWindow, &w, &h ) )
+         {
+            hb_storni( w, 2 );
+            hb_storni( h, 3 );
+            hb_retl( HB_TRUE );
+         }
+         else
+         {
+            hb_retl( HB_FALSE );
+         }
+      }
+      else
+      {
+         hb_retl( HB_FALSE );
+      }
+   }
+   else
+   {
+      HB_ERR_ARGS();
+   }
 }
 
 HB_FUNC( SDL_GETWINDOWSURFACE )
@@ -5003,19 +5031,23 @@ HB_FUNC( SDL_RENDERRECTS )
 // bool SDL_RenderTexture( SDL_Renderer *renderer, SDL_Texture *texture, const SDL_FRect *srcrect, const SDL_FRect *dstrect );
 HB_FUNC( SDL_RENDERTEXTURE )
 {
-   PHB_ITEM pArray1;
-   PHB_ITEM pArray2;
+   PHB_ITEM pArraySrcrect = hb_param( 3, HB_IT_ARRAY | HB_IT_NIL );
+   PHB_ITEM pArrayDstrect;
 
-   /* TODO */
    if( hb_param( 1, HB_IT_POINTER ) != NULL && hb_param( 2, HB_IT_POINTER ) != NULL &&
-      /*( pArray1 = hb_param( 3, HB_IT_ARRAY ) ) != NULL && hb_arrayLen( pArray1 ) == 4 &&*/
-      ( pArray2 = hb_param( 4, HB_IT_ARRAY ) ) != NULL && hb_arrayLen( pArray2 ) == 4 )
+       ( pArraySrcrect || HB_ISNIL( 3 ) ) &&  // opcjonalny
+       ( pArrayDstrect = hb_param( 4, HB_IT_ARRAY ) ) != NULL && hb_arrayLen( pArrayDstrect ) == 4 ) //wymagany
    {
-      //SDL_FRect srcrect = hb_sdl_frect_param_array( pArray1 );
-      SDL_FRect dstrect = hb_sdl_frect_param_array( pArray2 );
+      SDL_FRect srcrect, *pSrcrect = NULL;
+      SDL_FRect dstrect = hb_sdl_frect_param_array( pArrayDstrect );
 
-      hb_retl( SDL_RenderTexture( hb_sdl_renderer_ParamPtr( 1 ), hb_sdl_texture_ParamPtr( 2 ), NULL, &dstrect ) );
+      if( pArraySrcrect )
+      {
+         srcrect = hb_sdl_frect_param_array( pArraySrcrect );
+         pSrcrect = &srcrect;
+      }
 
+      hb_retl( SDL_RenderTexture( hb_sdl_renderer_ParamPtr( 1 ), hb_sdl_texture_ParamPtr( 2 ), pSrcrect, &dstrect ) );
    }
    else
    {
