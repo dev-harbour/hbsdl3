@@ -221,3 +221,64 @@ HB_FUNC( EVENTKEYREPEAT )
 /* -------------------------------------------------------------------------
 Harbour Implementation SDL3_ttf
 ------------------------------------------------------------------------- */
+// void drawText( TTF_Font *pFont, SDL_Renderer *pRenderer, float x, float y, const char *text, SDL_Color fg, SDL_Color bg )
+HB_FUNC( SDLDRAWTEXT )
+{
+   PHB_ITEM pArray1;
+   PHB_ITEM pArray2;
+
+   if( hb_param( 1, HB_IT_POINTER ) != NULL &&
+       hb_param( 2, HB_IT_POINTER ) != NULL &&
+       hb_param( 3, HB_IT_NUMERIC ) != NULL &&
+       hb_param( 4, HB_IT_NUMERIC ) != NULL &&
+       hb_param( 5, HB_IT_STRING ) != NULL &&
+       ( pArray1 = hb_param( 6, HB_IT_ARRAY ) ) != NULL && hb_arrayLen( pArray1 ) == 4 &&
+       ( pArray2 = hb_param( 7, HB_IT_ARRAY ) ) != NULL && hb_arrayLen( pArray2 ) == 4 )
+   {
+      TTF_Font *pFont = hb_ttf_font_ParamPtr( 1 );
+      SDL_Renderer *pRenderer = hb_sdl_renderer_ParamPtr( 2 );
+
+      float x = ( float ) hb_parnd( 3 );
+      float y = ( float ) hb_parnd( 4 );
+      const char *text = hb_parc( 5 );
+      SDL_Color fg = hb_sdl_color_param_array( pArray1 );
+      SDL_Color bg = hb_sdl_color_param_array( pArray2 );
+
+      int textWidth = 0;
+      size_t textLength = strlen( text );
+
+      TTF_MeasureString( pFont, text, textLength, 0, &textWidth, NULL );
+
+      float fontCellWidth = ( float ) textWidth / textLength;
+      float fontCellHeight = ( float ) TTF_GetFontLineSkip( pFont );
+
+      x = x * fontCellWidth;
+      y = y * fontCellHeight;
+
+      SDL_Surface *pSurface = TTF_RenderText_Shaded( pFont, text, textLength, fg, bg );
+      if( pSurface )
+      {
+         SDL_Texture *textTexture = SDL_CreateTextureFromSurface( pRenderer, pSurface );
+         SDL_DestroySurface( pSurface );
+
+         if( textTexture )
+         {
+            SDL_FRect textRect = { x, y, ( float ) textWidth, fontCellHeight };
+            SDL_RenderTexture( pRenderer, textTexture, NULL, &textRect );
+            SDL_DestroyTexture( textTexture );
+         }
+         else
+         {
+            fprintf( stderr, "Error creating texture: %s\n", SDL_GetError() );
+         }
+      }
+      else
+      {
+         fprintf( stderr, "Error rendering text: %s\n", SDL_GetError() );
+      }
+   }
+   else
+   {
+      HB_ERR_ARGS();
+   }
+}
