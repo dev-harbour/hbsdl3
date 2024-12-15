@@ -56,6 +56,33 @@ PHB_ITEM __attribute__( ( unused ) ) hb_sdl_fcolor_return_array( const SDL_FColo
 }
 
 /* -------------------------------------------------------------------------
+Harbour Implementation SDL_FRect
+------------------------------------------------------------------------- */
+SDL_FRect hb_sdl_frect_param_array( PHB_ITEM pArray )
+{
+   SDL_FRect frect;
+
+   frect.x = ( float ) hb_arrayGetND( pArray, 1 );
+   frect.y = ( float ) hb_arrayGetND( pArray, 2 );
+   frect.w = ( float ) hb_arrayGetND( pArray, 3 );
+   frect.h = ( float ) hb_arrayGetND( pArray, 4 );
+
+   return frect;
+}
+
+PHB_ITEM __attribute__( ( unused ) ) hb_sdl_frect_return_array( const SDL_FRect *frect )
+{
+   PHB_ITEM pArray = hb_itemArrayNew( 4 );
+
+   hb_arraySetND( pArray, 1, frect->x );
+   hb_arraySetND( pArray, 2, frect->y );
+   hb_arraySetND( pArray, 3, frect->w );
+   hb_arraySetND( pArray, 4, frect->h );
+
+   return pArray;
+}
+
+/* -------------------------------------------------------------------------
 Harbour Implementation SDL_Event
 ------------------------------------------------------------------------- */
 // int EventType( SDL_Event *pEvent ); /**< SDL_EVENT_KEY_DOWN or SDL_EVENT_KEY_UP */
@@ -222,7 +249,7 @@ HB_FUNC( EVENTKEYREPEAT )
 Harbour Implementation SDL3_ttf
 ------------------------------------------------------------------------- */
 // void drawText( TTF_Font *pFont, SDL_Renderer *pRenderer, float x, float y, const char *text, SDL_Color fg, SDL_Color bg )
-HB_FUNC( SDLDRAWTEXT )
+HB_FUNC( DRAWTEXT )
 {
    PHB_ITEM pArray1;
    PHB_ITEM pArray2;
