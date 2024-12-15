@@ -392,15 +392,25 @@ HB_FUNC( TTF_INSERTTEXTSTRING )
 // bool TTF_MeasureString( TTF_Font *font, const char *text, size_t length, int max_width, int *measured_width, size_t *measured_length );
 HB_FUNC( TTF_MEASURESTRING )
 {
-   if( hb_param( 1, HB_IT_POINTER ) != NULL && hb_param( 2, HB_IT_STRING ) != NULL && hb_param( 3, HB_IT_NUMINT ) != NULL && hb_param( 4, HB_IT_INTEGER ) != NULL )
+   PHB_ITEM pItemWidth  = hb_param( 5, HB_IT_BYREF | HB_IT_NIL );
+   PHB_ITEM pItemLength = hb_param( 6, HB_IT_BYREF | HB_IT_NIL );
+
+   if( hb_param( 1, HB_IT_POINTER ) != NULL && hb_param( 2, HB_IT_STRING ) != NULL && hb_param( 3, HB_IT_NUMINT ) != NULL && hb_param( 4, HB_IT_INTEGER ) != NULL &&
+      ( pItemWidth  || HB_ISNIL( 5 ) ) &&
+      ( pItemLength || HB_ISNIL( 6 ) ) )
    {
-      /* TODO */
       int measured_width = 0;
       size_t measured_length = 0;
 
-      hb_retl( TTF_MeasureString( hb_ttf_font_ParamPtr( 1 ), hb_parc( 2 ), hb_parni( 3 ), hb_parni( 4 ), &measured_width, &measured_length ) );
-      hb_storni( measured_width, 5 );
-      hb_storns( measured_length, 6 );
+      hb_retl( TTF_MeasureString( hb_ttf_font_ParamPtr( 1 ), hb_parc( 2 ), hb_parns( 3 ), hb_parni( 4 ), &measured_width, &measured_length ) );
+      if( pItemWidth )
+      {
+         hb_storni( measured_width, 5 );
+      }
+      if( pItemLength )
+      {
+         hb_storns( measured_length, 6 );
+      }
    }
    else
    {
@@ -502,7 +512,7 @@ HB_FUNC( TTF_RENDERTEXT_SHADED )
       SDL_Color fg = hb_sdl_color_param_array( pArray1 );
       SDL_Color bg = hb_sdl_color_param_array( pArray2 );
 
-      hb_sdl_surface_Return( TTF_RenderText_Shaded( hb_ttf_font_ParamPtr( 1 ), hb_parc( 2 ), ( size_t ) hb_parni( 3 ), fg, bg ) );
+      hb_sdl_surface_Return( TTF_RenderText_Shaded( hb_ttf_font_ParamPtr( 1 ), hb_parc( 2 ), hb_parns( 3 ), fg, bg ) );
    }
    else
    {
@@ -524,7 +534,7 @@ HB_FUNC( TTF_RENDERTEXT_SHADED_WRAPPED )
       SDL_Color fg = hb_sdl_color_param_array( pArray1 );
       SDL_Color bg = hb_sdl_color_param_array( pArray2 );
 
-      hb_sdl_surface_Return( TTF_RenderText_Shaded_Wrapped( hb_ttf_font_ParamPtr( 1 ), hb_parc( 2 ), ( size_t ) hb_parni( 3 ), fg, bg, hb_parni( 6 ) ) );
+      hb_sdl_surface_Return( TTF_RenderText_Shaded_Wrapped( hb_ttf_font_ParamPtr( 1 ), hb_parc( 2 ), hb_parns( 3 ), fg, bg, hb_parni( 6 ) ) );
    }
    else
    {
