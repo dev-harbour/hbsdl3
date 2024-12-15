@@ -1120,8 +1120,17 @@ HB_FUNC( SDL_CREATETEXTURE )
 
 }
 
+// SDL_Texture *SDL_CreateTextureFromSurface( SDL_Renderer *renderer, SDL_Surface *surface );
 HB_FUNC( SDL_CREATETEXTUREFROMSURFACE )
 {
+   if( hb_param( 1, HB_IT_POINTER ) != NULL && hb_param( 2, HB_IT_POINTER ) != NULL )
+   {
+      hb_sdl_texture_Return( SDL_CreateTextureFromSurface( hb_sdl_renderer_ParamPtr( 1 ), hb_sdl_surface_ParamPtr( 2 ) ) );
+   }
+   else
+   {
+      HB_ERR_ARGS();
+   }
 
 }
 
@@ -4991,9 +5000,27 @@ HB_FUNC( SDL_RENDERRECTS )
 
 }
 
+// bool SDL_RenderTexture( SDL_Renderer *renderer, SDL_Texture *texture, const SDL_FRect *srcrect, const SDL_FRect *dstrect );
 HB_FUNC( SDL_RENDERTEXTURE )
 {
+   PHB_ITEM pArray1;
+   PHB_ITEM pArray2;
 
+   /* TODO */
+   if( hb_param( 1, HB_IT_POINTER ) != NULL && hb_param( 2, HB_IT_POINTER ) != NULL &&
+      /*( pArray1 = hb_param( 3, HB_IT_ARRAY ) ) != NULL && hb_arrayLen( pArray1 ) == 4 &&*/
+      ( pArray2 = hb_param( 4, HB_IT_ARRAY ) ) != NULL && hb_arrayLen( pArray2 ) == 4 )
+   {
+      //SDL_FRect srcrect = hb_sdl_frect_param_array( pArray1 );
+      SDL_FRect dstrect = hb_sdl_frect_param_array( pArray2 );
+
+      hb_retl( SDL_RenderTexture( hb_sdl_renderer_ParamPtr( 1 ), hb_sdl_texture_ParamPtr( 2 ), NULL, &dstrect ) );
+
+   }
+   else
+   {
+      HB_ERR_ARGS();
+   }
 }
 
 HB_FUNC( SDL_RENDERTEXTURE9GRID )
