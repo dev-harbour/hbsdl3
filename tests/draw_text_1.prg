@@ -83,7 +83,7 @@ PROCEDURE Main()
       nTextX := ( nWidth - Len( cText ) * nCharWidth ) / 2
       nTextY := ( nHeight - nCharHeight ) / 2
 
-      SDLdrawText( pFont, pRenderer, nTextX / nCharWidth, nTextY / nCharHeight, cText, { 0, 255, 0, 255 }, { 0, 0, 0, 255 } )
+      drawText( pFont, pRenderer, nTextX / nCharWidth, nTextY / nCharHeight, cText, { 0, 0, 0, 255 }, { 225, 225, 225, 255 } )
 
       SDL_RenderPresent( pRenderer )
 
