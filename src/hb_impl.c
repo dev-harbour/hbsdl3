@@ -100,9 +100,7 @@ HB_FUNC( EVENTTYPE )
    }
 }
 
-/*
- * SDL_KeyboardEvent
- */
+/* SDL_KeyboardEvent */
 // Uint32 EventKeyReserved( SDL_Event *pEvent );
 HB_FUNC( EVENTKEYRESERVED )
 {
@@ -248,7 +246,7 @@ HB_FUNC( EVENTKEYREPEAT )
 /* -------------------------------------------------------------------------
 Harbour Implementation SDL3_ttf
 ------------------------------------------------------------------------- */
-// void drawText( TTF_Font *pFont, SDL_Renderer *pRenderer, float x, float y, const char *text, SDL_Color fg, SDL_Color bg )
+// void drawText( TTF_Font *pFont, SDL_Renderer *pRenderer, int x, int y, const char *text, SDL_Color fg, SDL_Color bg )
 HB_FUNC( DRAWTEXT )
 {
    PHB_ITEM pArray1;
@@ -265,8 +263,8 @@ HB_FUNC( DRAWTEXT )
       TTF_Font *pFont = hb_ttf_font_ParamPtr( 1 );
       SDL_Renderer *pRenderer = hb_sdl_renderer_ParamPtr( 2 );
 
-      float x = ( float ) hb_parnd( 3 );
-      float y = ( float ) hb_parnd( 4 );
+      int x = hb_parni( 3 );
+      int y = hb_parni( 4 );
       const char *text = hb_parc( 5 );
       SDL_Color fg = hb_sdl_color_param_array( pArray1 );
       SDL_Color bg = hb_sdl_color_param_array( pArray2 );
