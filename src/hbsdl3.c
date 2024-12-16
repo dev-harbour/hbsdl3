@@ -5946,9 +5946,17 @@ HB_FUNC( SDL_SETWINDOWSURFACEVSYNC )
 
 }
 
+// bool SDL_SetWindowTitle( SDL_Window *window, const char *title );
 HB_FUNC( SDL_SETWINDOWTITLE )
 {
-
+   if( hb_param( 1, HB_IT_POINTER ) != NULL && hb_param( 2, HB_IT_STRING ) != NULL)
+   {
+      hb_retl( SDL_SetWindowTitle( hb_sdl_window_ParamPtr( 1 ), hb_parc( 2 ) ) );
+   }
+   else
+   {
+      HB_ERR_ARGS();
+   }
 }
 
 HB_FUNC( SDL_SETX11EVENTHOOK )
