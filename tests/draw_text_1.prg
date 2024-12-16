@@ -14,10 +14,8 @@ PROCEDURE Main()
    LOCAL lQuit := F
    LOCAL nWidth, nHeight
    LOCAL cText := "Hello, Harbour!"
-   LOCAL nTextX
-   LOCAL nTextY
-   LOCAL nCharWidth
-   LOCAL nCharHeight
+   LOCAL nTextX, nTextY
+   LOCAL nCharWidth, nCharHeight
 
    SDL_SetHint( SDL_HINT_SHUTDOWN_DBUS_ON_QUIT, "1" )
 
