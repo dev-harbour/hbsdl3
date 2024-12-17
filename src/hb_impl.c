@@ -246,7 +246,43 @@ HB_FUNC( EVENTKEYREPEAT )
 /* -------------------------------------------------------------------------
 Harbour Implementation SDL3_ttf
 ------------------------------------------------------------------------- */
-// void drawText( TTF_Font *pFont, SDL_Renderer *pRenderer, int x, int y, const char *text, SDL_Color fg, SDL_Color bg )
+static size_t utf8Len( const char *szUtf8String )
+{
+   size_t len = 0;
+   while( *szUtf8String )
+   {
+      unsigned char byte = *szUtf8String;
+
+      if( ( byte & 0x80 ) == 0 )         // ASCII (0xxxxxxx)
+         szUtf8String += 1;
+      else if( ( byte & 0xE0 ) == 0xC0 ) // (110xxxxx)
+         szUtf8String += 2;
+      else if( ( byte & 0xF0 ) == 0xE0 ) // (1110xxxx)
+         szUtf8String += 3;
+      else if( ( byte & 0xF8 ) == 0xF0 ) // (11110xxx)
+         szUtf8String += 4;
+      else
+         szUtf8String += 1;
+
+      len++;
+   }
+
+   return len;
+}
+
+static void calculateFontCellSize( TTF_Font *pFont, int *fontCellWidth, int *fontCellHeight )
+{
+   const char *szTestChar = "M";
+   int measuredWidth = 0;
+   size_t measuredLength = 0;
+
+   TTF_MeasureString( pFont, szTestChar, 0, 0, &measuredWidth, &measuredLength );
+
+   *fontCellWidth = measuredWidth;
+   *fontCellHeight = TTF_GetFontHeight( pFont );
+}
+
+// void drawText( TTF_Font *pFont, SDL_Renderer *pRenderer, int x, int y, const char *szText, SDL_Color fg, SDL_Color bg )
 HB_FUNC( DRAWTEXT )
 {
    PHB_ITEM pArray1;
@@ -265,32 +301,37 @@ HB_FUNC( DRAWTEXT )
 
       int x = hb_parni( 3 );
       int y = hb_parni( 4 );
-      const char *text = hb_parc( 5 );
+      const char *szText = hb_parc( 5 );
       SDL_Color fg = hb_sdl_color_param_array( pArray1 );
       SDL_Color bg = hb_sdl_color_param_array( pArray2 );
 
-      int textWidth = 0;
-      size_t textLength = strlen( text );
+      int fontCellWidth, fontCellHeight;
 
-      TTF_MeasureString( pFont, text, textLength, 0, &textWidth, NULL );
+      calculateFontCellSize( pFont, &fontCellWidth, &fontCellHeight );
 
-      float fontCellWidth = ( float ) textWidth / textLength;
-      float fontCellHeight = ( float ) TTF_GetFontLineSkip( pFont );
+      x *= fontCellWidth;
+      y *= fontCellHeight;
 
-      x = x * fontCellWidth;
-      y = y * fontCellHeight;
+      size_t len = utf8Len( szText );
+      if( len == 0 )
+      {
+         SDL_FRect rect = { x, y, ( float ) fontCellWidth, ( float ) fontCellHeight };
+         SDL_SetRenderDrawColor( pRenderer, bg.r, bg.g, bg.b, bg.a );
+         SDL_RenderFillRect( pRenderer, &rect );
+         return;
+      }
 
-      SDL_Surface *pSurface = TTF_RenderText_Shaded( pFont, text, textLength, fg, bg );
+      SDL_Surface *pSurface = TTF_RenderText_Shaded( pFont, szText, 0, fg, bg );
       if( pSurface )
       {
-         SDL_Texture *textTexture = SDL_CreateTextureFromSurface( pRenderer, pSurface );
+         SDL_Texture *pTextTexture = SDL_CreateTextureFromSurface( pRenderer, pSurface );
          SDL_DestroySurface( pSurface );
 
-         if( textTexture )
+         if( pTextTexture )
          {
-            SDL_FRect textRect = { x, y, ( float ) textWidth, fontCellHeight };
-            SDL_RenderTexture( pRenderer, textTexture, NULL, &textRect );
-            SDL_DestroyTexture( textTexture );
+            SDL_FRect textRect = { x, y, ( float ) fontCellWidth * len, ( float ) fontCellHeight };
+            SDL_RenderTexture( pRenderer, pTextTexture, NULL, &textRect );
+            SDL_DestroyTexture( pTextTexture );
          }
          else
          {
