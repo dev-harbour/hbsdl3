@@ -90,11 +90,11 @@ PROCEDURE Main()
 
       ENDDO
 
-      SDL_SetRenderDrawColor( pRenderer, 50, 50, 50, 255 )
+      SDL_SetRenderDrawColor( pRenderer, 0x32, 0x32, 0x32, 0xFF )
       SDL_RenderClear( pRenderer )
 
       FOR i := 1 TO nLines
-         drawText( pFont, pRenderer, 1, i -1, cText[ i ], { 0, 0, 0, 255 }, { 225, 225, 225, 255 } )
+         drawText( pFont, pRenderer, 1, i -1, cText[ i ], { 0x00, 0x00, 0x00, 0xFF }, { 0xFF, 0xFF, 0xFF, 0xFF } )
       NEXT
 
       SDL_RenderPresent( pRenderer )
