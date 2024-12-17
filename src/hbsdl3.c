@@ -5791,9 +5791,17 @@ HB_FUNC( SDL_SETTLS )
 
 }
 
+// bool SDL_SetWindowAlwaysOnTop( SDL_Window *window, bool on_top );
 HB_FUNC( SDL_SETWINDOWALWAYSONTOP )
 {
-
+   if( hb_param( 1, HB_IT_POINTER ) != NULL && hb_param( 2, HB_IT_LOGICAL ) != NULL  )
+   {
+      hb_retl( SDL_SetWindowAlwaysOnTop( hb_sdl_window_ParamPtr( 1 ), hb_parl( 2 ) ) );
+   }
+   else
+   {
+      HB_ERR_ARGS();
+   }
 }
 
 HB_FUNC( SDL_SETWINDOWASPECTRATIO )
@@ -5801,14 +5809,30 @@ HB_FUNC( SDL_SETWINDOWASPECTRATIO )
 
 }
 
+// bool SDL_SetWindowBordered( SDL_Window *window, bool bordered );
 HB_FUNC( SDL_SETWINDOWBORDERED )
 {
-
+   if( hb_param( 1, HB_IT_POINTER ) != NULL && hb_param( 2, HB_IT_LOGICAL ) != NULL  )
+   {
+      hb_retl( SDL_SetWindowBordered( hb_sdl_window_ParamPtr( 1 ), hb_parl( 2 ) ) );
+   }
+   else
+   {
+      HB_ERR_ARGS();
+   }
 }
 
+// bool SDL_SetWindowFocusable( SDL_Window *window, bool focusable );
 HB_FUNC( SDL_SETWINDOWFOCUSABLE )
 {
-
+   if( hb_param( 1, HB_IT_POINTER ) != NULL && hb_param( 2, HB_IT_LOGICAL ) != NULL  )
+   {
+      hb_retl( SDL_SetWindowFocusable( hb_sdl_window_ParamPtr( 1 ), hb_parl( 2 ) ) );
+   }
+   else
+   {
+      HB_ERR_ARGS();
+   }
 }
 
 // bool SDL_SetWindowFullscreen( SDL_Window *window, bool fullscreen );
