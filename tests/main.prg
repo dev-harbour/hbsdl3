@@ -36,31 +36,31 @@ PROCEDURE Main()
 
          SWITCH( EventType( pEvent ) )
 
-            CASE SDL_EVENT_QUIT
-               OutStd( e"\nWindow closed" )
+         CASE SDL_EVENT_QUIT
+            OutStd( e"\nWindow closed" )
+            lQuit := T
+            EXIT
+
+         CASE SDL_EVENT_WINDOW_CLOSE_REQUESTED
+            OutStd( e"\nWindow close requested" )
+            lQuit := T
+            EXIT
+
+         CASE SDL_EVENT_KEY_DOWN
+            IF( EventKeyKey( pEvent ) == SDLK_ESCAPE )
+               OutStd( e"\nEsc pressed" )
                lQuit := T
-               EXIT
+            ELSE
+               OutStd( e"\nOther key pressed (scancode: ", EventKeyKey( pEvent ), ")" )
+            ENDIF
+            EXIT
 
-            CASE SDL_EVENT_WINDOW_CLOSE_REQUESTED
-               OutStd( e"\nWindow close requested" )
-               lQuit := T
-               EXIT
+         CASE SDL_EVENT_KEY_UP
+            OutStd( e"\nKey released (scancode: ", EventKeyKey( pEvent ), ")" )
+            EXIT
 
-            CASE SDL_EVENT_KEY_DOWN
-               IF( EventKeyKey( pEvent ) == SDLK_ESCAPE )
-                  OutStd( e"\nEsc pressed" )
-                  lQuit := T
-               ELSE
-                  OutStd( e"\nOther key pressed (scancode: ", EventKeyKey( pEvent ), ")" )
-               ENDIF
-               EXIT
-
-            CASE SDL_EVENT_KEY_UP
-               OutStd( e"\nKey released (scancode: ", EventKeyKey( pEvent ), ")" )
-               EXIT
-
-            OTHERWISE
-               OutStd( e"\nUnhandled event (type: ", EventType( pEvent ), ")" )
+         OTHERWISE
+            OutStd( e"\nUnhandled event (type: ", EventType( pEvent ), ")" )
 
          ENDSWITCH
 
@@ -76,4 +76,4 @@ PROCEDURE Main()
    // However, the user can also use SDL's destruction functions (e.g., SDL_Destroy...())
    // to manually release resources if needed. The Garbage Collector will handle any remaining resources upon application termination.
 
-RETURN
+   RETURN
