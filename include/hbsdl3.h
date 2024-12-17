@@ -23,6 +23,7 @@ extern HB_EXPORT SDL_Window *hb_sdl_window_ParamGet( int iParam );
 extern HB_EXPORT SDL_Window *hb_sdl_window_ItemGet( PHB_ITEM pItem );
 extern HB_EXPORT PHB_ITEM    hb_sdl_window_ItemPut( PHB_ITEM pItem, SDL_Window *pSDL_Window );
 extern HB_EXPORT void        hb_sdl_window_ItemClear( PHB_ITEM pItem );
+extern HB_EXPORT void        hb_sdl_window_StorPtr( SDL_Window *pSDL_Window, int iParam );
 extern HB_EXPORT void        hb_sdl_window_Return( SDL_Window *pSDL_Window );
 
 extern HB_EXPORT SDL_Renderer *hb_sdl_renderer_ParamPtr( int iParam );
@@ -30,6 +31,7 @@ extern HB_EXPORT SDL_Renderer *hb_sdl_renderer_ParamGet( int iParam );
 extern HB_EXPORT SDL_Renderer *hb_sdl_renderer_ItemGet( PHB_ITEM pItem );
 extern HB_EXPORT PHB_ITEM      hb_sdl_renderer_ItemPut( PHB_ITEM pItem, SDL_Renderer *pSDL_Renderer );
 extern HB_EXPORT void          hb_sdl_renderer_ItemClear( PHB_ITEM pItem );
+extern HB_EXPORT void          hb_sdl_renderer_StorPtr( SDL_Renderer *pSDL_Renderer, int iParam );
 extern HB_EXPORT void          hb_sdl_renderer_Return( SDL_Renderer *pSDL_Renderer );
 
 extern HB_EXPORT SDL_Event *hb_sdl_event_ParamPtr( int iParam );
