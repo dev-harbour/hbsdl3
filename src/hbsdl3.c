@@ -92,6 +92,14 @@ void hb_sdl_window_ItemClear( PHB_ITEM pItem )
       *ppSDL_Window = NULL;
 }
 
+void hb_sdl_window_StorPtr( SDL_Window *pSDL_Window, int iParam )
+{
+   SDL_Window **ppSDL_Window = ( SDL_Window ** ) hb_gcAllocate( sizeof( SDL_Window * ), &s_gc_sdl_window_Funcs );
+
+   *ppSDL_Window = pSDL_Window;
+   hb_storptrGC( ppSDL_Window, iParam );
+}
+
 void hb_sdl_window_Return( SDL_Window *pSDL_Window )
 {
    if( pSDL_Window )
@@ -168,6 +176,14 @@ void hb_sdl_renderer_ItemClear( PHB_ITEM pItem )
 
    if( ppSDL_Renderer )
       *ppSDL_Renderer = NULL;
+}
+
+void hb_sdl_renderer_StorPtr( SDL_Renderer *pSDL_Renderer, int iParam )
+{
+   SDL_Renderer **ppSDL_Renderer = ( SDL_Renderer ** ) hb_gcAllocate( sizeof( SDL_Renderer * ), &s_gc_sdl_renderer_Funcs );
+
+   *ppSDL_Renderer = pSDL_Renderer;
+   hb_storptrGC( ppSDL_Renderer, iParam );
 }
 
 void hb_sdl_renderer_Return( SDL_Renderer *pSDL_Renderer )
@@ -1154,7 +1170,7 @@ HB_FUNC( SDL_CREATEWINDOW )
 {
    if( hb_param( 1, HB_IT_STRING ) != NULL && hb_param( 2, HB_IT_INTEGER ) != NULL && hb_param( 3, HB_IT_INTEGER ) != NULL && hb_param( 4, HB_IT_NUMINT ) != NULL )
    {
-      hb_sdl_window_Return( SDL_CreateWindow( hb_parc( 1 ), hb_parni( 2 ), hb_parni( 3 ), hb_parni( 4 ) ) );
+      hb_sdl_window_Return( SDL_CreateWindow( hb_parc( 1 ), hb_parni( 2 ), hb_parni( 3 ), ( Uint64 ) hb_parnl( 4 ) ) );
    }
    else
    {
@@ -1162,10 +1178,59 @@ HB_FUNC( SDL_CREATEWINDOW )
    }
 }
 
+// bool SDL_CreateWindowAndRenderer( const char *title, int width, int height, SDL_WindowFlags window_flags, SDL_Window **window, SDL_Renderer **renderer );
+// bool SDL_CreateWindowAndRenderer( const char *title, int width, int height, SDL_WindowFlags window_flags, SDL_Window **window, SDL_Renderer **renderer );
 HB_FUNC( SDL_CREATEWINDOWANDRENDERER )
 {
+   if( hb_param( 1, HB_IT_STRING ) != NULL &&
+       hb_param( 2, HB_IT_INTEGER ) != NULL &&
+       hb_param( 3, HB_IT_INTEGER ) != NULL &&
+       hb_param( 4, HB_IT_NUMINT ) != NULL &&
+       hb_param( 5, HB_IT_BYREF ) != NULL &&
+       hb_param( 6, HB_IT_BYREF ) != NULL )
+   {
+      SDL_Window *pWindow = NULL;      
+      SDL_Renderer *pRenderer = NULL;
 
+      bool lResult = SDL_CreateWindowAndRenderer(
+                        hb_parc( 1 ),                // Title
+                        hb_parni( 2 ),               // Width
+                        hb_parni( 3 ),               // Height
+                        ( Uint64 ) hb_parnl( 4 ),    // Window flags
+                        &pWindow,                    // Wskaźnik na okno
+                        &pRenderer );                // Wskaźnik na renderer
+
+      hb_retl( lResult ); // Zwróć wynik (true/false)
+
+      // Zapisz obiekty do parametrów 5 i 6
+      hb_sdl_window_StorPtr( pWindow, 5 );
+      hb_sdl_renderer_StorPtr( pRenderer, 6 );
+   }
+   else
+   {
+      HB_ERR_ARGS();
+   }
 }
+
+/*
+HB_FUNC( SDL_CREATEWINDOWANDRENDERER )
+{
+   if( hb_param( 1, HB_IT_STRING ) != NULL && hb_param( 2, HB_IT_INTEGER ) != NULL && hb_param( 3, HB_IT_INTEGER ) != NULL && hb_param( 4, HB_IT_NUMINT ) != NULL &&
+      hb_param( 5, HB_IT_BYREF ) != NULL && hb_param( 6, HB_IT_BYREF ) != NULL )
+   {
+      SDL_Window *pWindow = ( SDL_Window * ) hb_xgrab( sizeof( SDL_Window ) );
+      SDL_Renderer *pRenderer = ( SDL_Renderer * ) hb_xgrab( sizeof( SDL_Renderer ) );
+
+      hb_retl( SDL_CreateWindowAndRenderer( hb_parc( 1 ), hb_parni( 2 ), hb_parni( 3 ), ( Uint64 ) hb_parnl( 4 ), &pWindow, &pRenderer ) );
+      hb_sdl_window_StorPtr( pWindow, 5 );
+      hb_sdl_renderer_StorPtr( pRenderer, 6 );
+   }
+   else
+   {
+      HB_ERR_ARGS();
+   }
+}
+*/
 
 HB_FUNC( SDL_CREATEWINDOWWITHPROPERTIES )
 {
@@ -4110,9 +4175,17 @@ HB_FUNC( SDL_KILLPROCESS )
 
 }
 
+// SDL_Surface *SDL_LoadBMP( const char *file );
 HB_FUNC( SDL_LOADBMP )
 {
-
+   if( hb_param( 1, HB_IT_STRING ) != NULL )
+   {
+      hb_sdl_surface_Return( SDL_LoadBMP( hb_parc( 1 ) ) );
+   }
+   else
+   {
+      HB_ERR_ARGS();
+   }
 }
 
 HB_FUNC( SDL_LOADBMP_IO )
@@ -5032,14 +5105,14 @@ HB_FUNC( SDL_RENDERRECTS )
 HB_FUNC( SDL_RENDERTEXTURE )
 {
    PHB_ITEM pArraySrcrect = hb_param( 3, HB_IT_ARRAY | HB_IT_NIL );
-   PHB_ITEM pArrayDstrect;
+   PHB_ITEM pArrayDstrect = hb_param( 4, HB_IT_ARRAY | HB_IT_NIL );
 
    if( hb_param( 1, HB_IT_POINTER ) != NULL && hb_param( 2, HB_IT_POINTER ) != NULL &&
-       ( pArraySrcrect || HB_ISNIL( 3 ) ) &&  // opcjonalny
-       ( pArrayDstrect = hb_param( 4, HB_IT_ARRAY ) ) != NULL && hb_arrayLen( pArrayDstrect ) == 4 ) //wymagany
+       ( pArraySrcrect || HB_ISNIL( 3 ) ) &&
+       ( pArrayDstrect || HB_ISNIL( 4 ) ) )
    {
       SDL_FRect srcrect, *pSrcrect = NULL;
-      SDL_FRect dstrect = hb_sdl_frect_param_array( pArrayDstrect );
+      SDL_FRect dstrect, *pDstrect = NULL;
 
       if( pArraySrcrect )
       {
@@ -5047,7 +5120,13 @@ HB_FUNC( SDL_RENDERTEXTURE )
          pSrcrect = &srcrect;
       }
 
-      hb_retl( SDL_RenderTexture( hb_sdl_renderer_ParamPtr( 1 ), hb_sdl_texture_ParamPtr( 2 ), pSrcrect, &dstrect ) );
+      if( pArrayDstrect )
+      {
+         dstrect = hb_sdl_frect_param_array( pArrayDstrect );
+         pDstrect = &dstrect;
+      }
+
+      hb_retl( SDL_RenderTexture( hb_sdl_renderer_ParamPtr( 1 ), hb_sdl_texture_ParamPtr( 2 ), pSrcrect, pDstrect ) );
    }
    else
    {
