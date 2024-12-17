@@ -3395,29 +3395,13 @@ HB_FUNC( SDL_GETWINDOWPIXELFORMAT )
 // bool SDL_GetWindowPosition( SDL_Window *window, int *x, int *y );
 HB_FUNC( SDL_GETWINDOWPOSITION )
 {
-   if( hb_param( 1, HB_IT_POINTER ) != NULL &&
-       hb_param( 2, HB_IT_BYREF ) != NULL &&
-       hb_param( 3, HB_IT_BYREF ) != NULL )
+   if( hb_param( 1, HB_IT_POINTER ) != NULL && hb_param( 2, HB_IT_BYREF ) != NULL && hb_param( 3, HB_IT_BYREF ) != NULL )
    {
       SDL_Window *pWindow = hb_sdl_window_ParamPtr( 1 );
-      if( pWindow != NULL )
-      {
-         int w = 0, h = 0;
-         if( SDL_GetWindowPosition( pWindow, &w, &h ) )
-         {
-            hb_storni( w, 2 );
-            hb_storni( h, 3 );
-            hb_retl( HB_TRUE );
-         }
-         else
-         {
-            hb_retl( HB_FALSE );
-         }
-      }
-      else
-      {
-         hb_retl( HB_FALSE );
-      }
+      int w = 0, h = 0;
+      hb_retl( SDL_GetWindowPosition( pWindow, &w, &h ) );
+      hb_storni( w, 2 );
+      hb_storni( h, 3 );
    }
    else
    {
@@ -3435,9 +3419,27 @@ HB_FUNC( SDL_GETWINDOWRELATIVEMOUSEMODE )
 
 }
 
+// SDL_Window **SDL_GetWindows( int *count );
 HB_FUNC( SDL_GETWINDOWS )
 {
+   int iCount = 0;
+   SDL_Window **ppWindows = SDL_GetWindows( &iCount );
 
+   if( ppWindows && iCount > 0 )
+   {
+      PHB_ITEM pArray = hb_itemArrayNew( iCount );
+
+      for( int i = 0; i < iCount; i++ )
+      {
+         hb_sdl_window_ItemPut( hb_arrayGetItemPtr( pArray, i + 1 ), ppWindows[ i ] );
+      }
+
+      hb_itemReturnRelease( pArray );
+   }
+   else
+   {
+      hb_reta( 0 );
+   }
 }
 
 HB_FUNC( SDL_GETWINDOWSAFEAREA )
@@ -3448,29 +3450,13 @@ HB_FUNC( SDL_GETWINDOWSAFEAREA )
 // bool SDL_GetWindowSize( SDL_Window *window, int *w, int *h );
 HB_FUNC( SDL_GETWINDOWSIZE )
 {
-   if( hb_param( 1, HB_IT_POINTER ) != NULL &&
-       hb_param( 2, HB_IT_BYREF ) != NULL &&
-       hb_param( 3, HB_IT_BYREF ) != NULL )
+   if( hb_param( 1, HB_IT_POINTER ) != NULL && hb_param( 2, HB_IT_BYREF ) != NULL && hb_param( 3, HB_IT_BYREF ) != NULL )
    {
       SDL_Window *pWindow = hb_sdl_window_ParamPtr( 1 );
-      if( pWindow != NULL )
-      {
-         int w = 0, h = 0;
-         if( SDL_GetWindowSize( pWindow, &w, &h ) )
-         {
-            hb_storni( w, 2 );
-            hb_storni( h, 3 );
-            hb_retl( HB_TRUE );
-         }
-         else
-         {
-            hb_retl( HB_FALSE );
-         }
-      }
-      else
-      {
-         hb_retl( HB_FALSE );
-      }
+      int w = 0, h = 0;
+      hb_retl( SDL_GetWindowSize( pWindow, &w, &h ) );
+      hb_storni( w, 2 );
+      hb_storni( h, 3 );
    }
    else
    {
@@ -3481,29 +3467,13 @@ HB_FUNC( SDL_GETWINDOWSIZE )
 // bool SDL_GetWindowSizeInPixels(SDL_Window *window, int *w, int *h);
 HB_FUNC( SDL_GETWINDOWSIZEINPIXELS )
 {
-   if( hb_param( 1, HB_IT_POINTER ) != NULL &&
-       hb_param( 2, HB_IT_BYREF ) != NULL &&
-       hb_param( 3, HB_IT_BYREF ) != NULL )
+   if( hb_param( 1, HB_IT_POINTER ) != NULL && hb_param( 2, HB_IT_BYREF ) != NULL && hb_param( 3, HB_IT_BYREF ) != NULL )
    {
       SDL_Window *pWindow = hb_sdl_window_ParamPtr( 1 );
-      if( pWindow != NULL )
-      {
-         int w = 0, h = 0;
-         if( SDL_GetWindowSizeInPixels( pWindow, &w, &h ) )
-         {
-            hb_storni( w, 2 );
-            hb_storni( h, 3 );
-            hb_retl( T );
-         }
-         else
-         {
-            hb_retl( F );
-         }
-      }
-      else
-      {
-         hb_retl( HB_FALSE );
-      }
+      int w = 0, h = 0;
+      hb_retl( SDL_GetWindowSizeInPixels( pWindow, &w, &h ) );
+      hb_storni( w, 2 );
+      hb_storni( h, 3 );
    }
    else
    {
