@@ -938,14 +938,30 @@ HB_FUNC( SDL_COPYSTORAGEFILE )
 
 }
 
+// double SDL_cos( double x );
 HB_FUNC( SDL_COS )
 {
-
+   if( hb_param( 1, HB_IT_NUMERIC ) != NULL )
+   {
+      hb_retnd( SDL_cos( hb_parnd( 1 ) ) );
+   }
+   else
+   {
+      HB_ERR_ARGS();
+   }
 }
 
+// float SDL_cosf( float x );
 HB_FUNC( SDL_COSF )
 {
-
+   if( hb_param( 1, HB_IT_NUMERIC ) != NULL )
+   {
+      hb_retnd( SDL_cosf( ( float ) hb_parnd( 1 ) ) );
+   }
+   else
+   {
+      HB_ERR_ARGS();
+   }
 }
 
 HB_FUNC( SDL_CREATEASYNCIOQUEUE )
@@ -6067,9 +6083,17 @@ HB_FUNC( SDL_SHOWSIMPLEMESSAGEBOX )
 
 }
 
+// bool SDL_ShowWindow( SDL_Window *window );
 HB_FUNC( SDL_SHOWWINDOW )
 {
-
+   if( hb_param( 1, HB_IT_POINTER ) != NULL )
+   {
+      hb_retl( SDL_ShowWindow( hb_sdl_window_ParamPtr( 1 ) ) );
+   }
+   else
+   {
+      HB_ERR_ARGS();
+   }
 }
 
 HB_FUNC( SDL_SHOWWINDOWSYSTEMMENU )
@@ -6092,14 +6116,30 @@ HB_FUNC( SDL_SIGNALSEMAPHORE )
 
 }
 
+// double SDL_sin( double x );
 HB_FUNC( SDL_SIN )
 {
-
+   if( hb_param( 1, HB_IT_NUMERIC ) != NULL )
+   {
+      hb_retnd( SDL_sin( hb_parnd( 1 ) ) );
+   }
+   else
+   {
+      HB_ERR_ARGS();
+   }
 }
 
+// float SDL_sinf( float x );
 HB_FUNC( SDL_SINF )
 {
-
+   if( hb_param( 1, HB_IT_NUMERIC ) != NULL )
+   {
+      hb_retnd( SDL_sinf( ( float ) hb_parnd( 1 ) ) );
+   }
+   else
+   {
+      HB_ERR_ARGS();
+   }
 }
 
 HB_FUNC( SDL_SIZE_ADD_CHECK_OVERFLOW )
