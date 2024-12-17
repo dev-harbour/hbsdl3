@@ -17,6 +17,7 @@ PROCEDURE Main()
 
    // All cleanup functions are automatically handled by the Harbour Garbage Collector.
    // However, the user can also use SDL's destruction functions (e.g., SDL_Destroy...())
-   // to manually release resources if needed. The Garbage Collector will handle any remaining resources upon application termination.
+   // to manually release resources if needed. The Garbage Collector will handle any
+   // remaining resources upon application termination.
 
 RETURN
