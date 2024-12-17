@@ -12,33 +12,32 @@ PROCEDURE Main()
    LOCAL pFont
    LOCAL pEvent
    LOCAL lQuit := F
-   LOCAL cText := {;
-      "",;
-      "Mathematics and sciences:",;
-      "",;
-      "  ∮ E⋅da = Q,  n → ∞, ∑ f(i) = ∏ g(i),      ⎧⎡⎛┌─────┐⎞⎤⎫",;
-      "                                            ⎪⎢⎜│a²+b³ ⎟⎥⎪",;
-      "  ∀x∈ℝ: ⌈x⌉ = −⌊−x⌋, α ∧ ¬β = ¬(¬α ∨ β),    ⎪⎢⎜│───── ⎟⎥⎪",;
-      "                                            ⎪⎢⎜⎷ c₈   ⎟⎥⎪",;
-      "  ℕ ⊆ ℕ₀ ⊂ ℤ ⊂ ℚ ⊂ ℝ ⊂ ℂ,                   ⎨⎢⎜       ⎟⎥⎬",;
-      "                                            ⎪⎢⎜ ∞     ⎟⎥⎪",;
-      "  ⊥ < a ≠ b ≡ c ≤ d ≪ ⊤ ⇒ (⟦A⟧ ⇔ ⟪B⟫),      ⎪⎢⎜ ⎲     ⎟⎥⎪",;
-      "                                            ⎪⎢⎜ ⎳aⁱ-bⁱ⎟⎥⎪",;
-      "  2H₂ + O₂ ⇌ 2H₂O, R = 4.7 kΩ, ⌀ 200 mm     ⎩⎣⎝i=1    ⎠⎦⎭",;
-      "",;
-      "Linguistics and dictionaries:",;
-      "",;
-      "  ði ıntəˈnæʃənəl fəˈnɛtık əsoʊsiˈeıʃn",;
-      "  Y [ˈʏpsilɔn], Yen [jɛn], Yoga [ˈjoːgɑ]",;
-      "",;
-      "APL:",;
-      "",;
+   LOCAL cText := { ;
+      "", ;
+      "Mathematics and sciences:", ;
+      "", ;
+      "  ∮ E⋅da = Q,  n → ∞, ∑ f(i) = ∏ g(i),      ⎧⎡⎛┌─────┐⎞⎤⎫", ;
+      "                                            ⎪⎢⎜│a²+b³ ⎟⎥⎪", ;
+      "  ∀x∈ℝ: ⌈x⌉ = −⌊−x⌋, α ∧ ¬β = ¬(¬α ∨ β),    ⎪⎢⎜│───── ⎟⎥⎪", ;
+      "                                            ⎪⎢⎜⎷ c₈   ⎟⎥⎪", ;
+      "  ℕ ⊆ ℕ₀ ⊂ ℤ ⊂ ℚ ⊂ ℝ ⊂ ℂ,                   ⎨⎢⎜       ⎟⎥⎬", ;
+      "                                            ⎪⎢⎜ ∞     ⎟⎥⎪", ;
+      "  ⊥ < a ≠ b ≡ c ≤ d ≪ ⊤ ⇒ (⟦A⟧ ⇔ ⟪B⟫),      ⎪⎢⎜ ⎲     ⎟⎥⎪", ;
+      "                                            ⎪⎢⎜ ⎳aⁱ-bⁱ⎟⎥⎪", ;
+      "  2H₂ + O₂ ⇌ 2H₂O, R = 4.7 kΩ, ⌀ 200 mm     ⎩⎣⎝i=1    ⎠⎦⎭", ;
+      "", ;
+      "Linguistics and dictionaries:", ;
+      "", ;
+      "  ði ıntəˈnæʃənəl fəˈnɛtık əsoʊsiˈeıʃn", ;
+      "  Y [ˈʏpsilɔn], Yen [jɛn], Yoga [ˈjoːgɑ]", ;
+      "", ;
+      "APL:", ;
+      "", ;
       "  ((V⍳V)=⍳⍴V)/V←,V    ⌷←⍳→⍴∆∇⊃‾⍎⍕⌈" }
 
 
    LOCAL nLines := Len( cText )
    LOCAL i
-
 
    SDL_SetHint( SDL_HINT_SHUTDOWN_DBUS_ON_QUIT, "1" )
 
@@ -76,15 +75,15 @@ PROCEDURE Main()
 
          SWITCH( EventType( pEvent ) )
 
-            CASE SDL_EVENT_QUIT
-               OutStd( e"\nWindow closed" )
-               lQuit := T
-               EXIT
+         CASE SDL_EVENT_QUIT
+            OutStd( e"\nWindow closed" )
+            lQuit := T
+            EXIT
 
-            CASE SDL_EVENT_WINDOW_CLOSE_REQUESTED
-               OutStd( e"\nWindow close requested" )
-               lQuit := T
-               EXIT
+         CASE SDL_EVENT_WINDOW_CLOSE_REQUESTED
+            OutStd( e"\nWindow close requested" )
+            lQuit := T
+            EXIT
 
          ENDSWITCH
 
@@ -94,11 +93,11 @@ PROCEDURE Main()
       SDL_RenderClear( pRenderer )
 
       FOR i := 1 TO nLines
-         drawText( pFont, pRenderer, 1, i -1, cText[ i ], { 0x00, 0x00, 0x00, 0xFF }, { 0xFF, 0xFF, 0xFF, 0xFF } )
+         drawText( pFont, pRenderer, 1, i - 1, cText[ i ], { 0x00, 0x00, 0x00, 0xFF }, { 0xFF, 0xFF, 0xFF, 0xFF } )
       NEXT
 
       SDL_RenderPresent( pRenderer )
 
    ENDDO
 
-RETURN
+   RETURN
