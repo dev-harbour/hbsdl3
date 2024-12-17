@@ -70,9 +70,9 @@ PROCEDURE Main()
       RETURN
    ENDIF
 
-   DO WHILE( !lQuit )
+   WHILE( !lQuit )
 
-      DO WHILE( SDL_PollEvent( @pEvent ) )
+      WHILE( SDL_PollEvent( @pEvent ) )
 
          SWITCH( EventType( pEvent ) )
 
