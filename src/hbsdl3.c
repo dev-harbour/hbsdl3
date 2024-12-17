@@ -1147,7 +1147,6 @@ HB_FUNC( SDL_CREATETEXTUREFROMSURFACE )
    {
       HB_ERR_ARGS();
    }
-
 }
 
 HB_FUNC( SDL_CREATETEXTUREWITHPROPERTIES )
@@ -1179,47 +1178,13 @@ HB_FUNC( SDL_CREATEWINDOW )
 }
 
 // bool SDL_CreateWindowAndRenderer( const char *title, int width, int height, SDL_WindowFlags window_flags, SDL_Window **window, SDL_Renderer **renderer );
-// bool SDL_CreateWindowAndRenderer( const char *title, int width, int height, SDL_WindowFlags window_flags, SDL_Window **window, SDL_Renderer **renderer );
-HB_FUNC( SDL_CREATEWINDOWANDRENDERER )
-{
-   if( hb_param( 1, HB_IT_STRING ) != NULL &&
-       hb_param( 2, HB_IT_INTEGER ) != NULL &&
-       hb_param( 3, HB_IT_INTEGER ) != NULL &&
-       hb_param( 4, HB_IT_NUMINT ) != NULL &&
-       hb_param( 5, HB_IT_BYREF ) != NULL &&
-       hb_param( 6, HB_IT_BYREF ) != NULL )
-   {
-      SDL_Window *pWindow = NULL;      
-      SDL_Renderer *pRenderer = NULL;
-
-      bool lResult = SDL_CreateWindowAndRenderer(
-                        hb_parc( 1 ),                // Title
-                        hb_parni( 2 ),               // Width
-                        hb_parni( 3 ),               // Height
-                        ( Uint64 ) hb_parnl( 4 ),    // Window flags
-                        &pWindow,                    // Wskaźnik na okno
-                        &pRenderer );                // Wskaźnik na renderer
-
-      hb_retl( lResult ); // Zwróć wynik (true/false)
-
-      // Zapisz obiekty do parametrów 5 i 6
-      hb_sdl_window_StorPtr( pWindow, 5 );
-      hb_sdl_renderer_StorPtr( pRenderer, 6 );
-   }
-   else
-   {
-      HB_ERR_ARGS();
-   }
-}
-
-/*
 HB_FUNC( SDL_CREATEWINDOWANDRENDERER )
 {
    if( hb_param( 1, HB_IT_STRING ) != NULL && hb_param( 2, HB_IT_INTEGER ) != NULL && hb_param( 3, HB_IT_INTEGER ) != NULL && hb_param( 4, HB_IT_NUMINT ) != NULL &&
-      hb_param( 5, HB_IT_BYREF ) != NULL && hb_param( 6, HB_IT_BYREF ) != NULL )
+       hb_param( 5, HB_IT_BYREF ) != NULL && hb_param( 6, HB_IT_BYREF ) != NULL )
    {
-      SDL_Window *pWindow = ( SDL_Window * ) hb_xgrab( sizeof( SDL_Window ) );
-      SDL_Renderer *pRenderer = ( SDL_Renderer * ) hb_xgrab( sizeof( SDL_Renderer ) );
+      SDL_Window *pWindow = NULL;
+      SDL_Renderer *pRenderer = NULL;
 
       hb_retl( SDL_CreateWindowAndRenderer( hb_parc( 1 ), hb_parni( 2 ), hb_parni( 3 ), ( Uint64 ) hb_parnl( 4 ), &pWindow, &pRenderer ) );
       hb_sdl_window_StorPtr( pWindow, 5 );
@@ -1230,7 +1195,6 @@ HB_FUNC( SDL_CREATEWINDOWANDRENDERER )
       HB_ERR_ARGS();
    }
 }
-*/
 
 HB_FUNC( SDL_CREATEWINDOWWITHPROPERTIES )
 {
