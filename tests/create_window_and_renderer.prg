@@ -38,9 +38,9 @@ PROCEDURE Main()
    ENDIF
    SDL_DestroySurface( pSurface )
 
-   DO WHILE( !lQuit )
+   WHILE( !lQuit )
 
-      DO WHILE( SDL_PollEvent( @pEvent ) )
+      WHILE( SDL_PollEvent( @pEvent ) )
 
          SWITCH( EventType( pEvent ) )
 
