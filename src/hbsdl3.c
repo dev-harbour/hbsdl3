@@ -3493,11 +3493,11 @@ HB_FUNC( SDL_GETWINDOWSIZEINPIXELS )
          {
             hb_storni( w, 2 );
             hb_storni( h, 3 );
-            hb_retl( HB_TRUE );
+            hb_retl( T );
          }
          else
          {
-            hb_retl( HB_FALSE );
+            hb_retl( F );
          }
       }
       else
@@ -3521,9 +3521,17 @@ HB_FUNC( SDL_GETWINDOWSURFACEVSYNC )
 
 }
 
+// const char *SDL_GetWindowTitle( SDL_Window *window );
 HB_FUNC( SDL_GETWINDOWTITLE )
 {
-
+   if( hb_param( 1, HB_IT_NUMINT ) != NULL )
+   {
+      hb_retc( SDL_GetWindowTitle( hb_sdl_window_ParamPtr( 1 ) ) );
+   }
+   else
+   {
+      HB_ERR_ARGS();
+   }
 }
 
 HB_FUNC( SDL_GL_CREATECONTEXT )
@@ -5901,9 +5909,17 @@ HB_FUNC( SDL_SETWINDOWHITTEST )
 
 }
 
+// bool SDL_SetWindowIcon( SDL_Window *window, SDL_Surface *icon );
 HB_FUNC( SDL_SETWINDOWICON )
 {
-
+   if( hb_param( 1, HB_IT_POINTER ) != NULL && hb_param( 2, HB_IT_POINTER ) != NULL  )
+   {
+      hb_retl( SDL_SetWindowIcon( hb_sdl_window_ParamPtr( 1 ), hb_sdl_surface_ParamPtr( 2 ) ) );
+   }
+   else
+   {
+      HB_ERR_ARGS();
+   }
 }
 
 HB_FUNC( SDL_SETWINDOWKEYBOARDGRAB )
