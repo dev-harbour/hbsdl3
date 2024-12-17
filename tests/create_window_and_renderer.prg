@@ -1,5 +1,5 @@
 /*
- * 
+ *
  */
 
 #include "hbsdl3.ch"
@@ -20,7 +20,7 @@ PROCEDURE Main()
       RETURN
    ENDIF
 
-   IF( !SDL_CreateWindowAndRenderer( "Simple SDL3 Window", 800, 600, SDL_WINDOW_RESIZABLE, @pWindow, @pRenderer ) )
+   IF( !SDL_CreateWindowAndRenderer( "Simple SDL3 Window", 512, 512, 0, @pWindow, @pRenderer ) )
       OutStd( e"\nError creating SDL window and renderer: ", SDL_GetError() )
       RETURN
    ENDIF
