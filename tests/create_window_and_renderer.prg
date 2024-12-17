@@ -44,15 +44,15 @@ PROCEDURE Main()
 
          SWITCH( EventType( pEvent ) )
 
-            CASE SDL_EVENT_QUIT
-               OutStd( e"\nWindow closed" )
-               lQuit := T
-               EXIT
+         CASE SDL_EVENT_QUIT
+            OutStd( e"\nWindow closed" )
+            lQuit := T
+            EXIT
 
-            CASE SDL_EVENT_WINDOW_CLOSE_REQUESTED
-               OutStd( e"\nWindow close requested" )
-               lQuit := T
-               EXIT
+         CASE SDL_EVENT_WINDOW_CLOSE_REQUESTED
+            OutStd( e"\nWindow close requested" )
+            lQuit := T
+            EXIT
 
          ENDSWITCH
 
@@ -65,4 +65,4 @@ PROCEDURE Main()
 
    ENDDO
 
-RETURN
+   RETURN
