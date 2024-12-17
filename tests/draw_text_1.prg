@@ -75,13 +75,13 @@ PROCEDURE Main()
 
       ENDDO
 
-      SDL_SetRenderDrawColor( pRenderer, 50, 50, 50, 255 )
+      SDL_SetRenderDrawColor( pRenderer, 0x32, 0x32, 0x32, 0xFF )
       SDL_RenderClear( pRenderer )
 
       nTextX := ( nWidth - Len( cText ) * nCharWidth ) / 2
       nTextY := ( nHeight - nCharHeight ) / 2
 
-      drawText( pFont, pRenderer, nTextX / nCharWidth, nTextY / nCharHeight, cText, { 0, 0, 0, 255 }, { 225, 225, 225, 255 } )
+      drawText( pFont, pRenderer, nTextX / nCharWidth, nTextY / nCharHeight, cText, { 0x00, 0x00, 0x00, 0xFF }, { 0xFF, 0xFF, 0xFF, 0xFF } )
 
       SDL_RenderPresent( pRenderer )
 
