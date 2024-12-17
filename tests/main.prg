@@ -66,7 +66,7 @@ PROCEDURE Main()
 
       ENDDO
 
-      SDL_SetRenderDrawColor( pRenderer, 50, 50, 50, 255 )
+      SDL_SetRenderDrawColor( pRenderer, 0x32, 0x32, 0x32, 0xFF )
       SDL_RenderClear( pRenderer )
       SDL_RenderPresent( pRenderer )
 
