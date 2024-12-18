@@ -56,6 +56,33 @@ PHB_ITEM __attribute__( ( unused ) ) hb_sdl_fcolor_return_array( const SDL_FColo
 }
 
 /* -------------------------------------------------------------------------
+Harbour Implementation SDL_Rect
+------------------------------------------------------------------------- */
+SDL_Rect hb_sdl_rect_param_array( PHB_ITEM pArray )
+{
+   SDL_Rect rect;
+
+   rect.x = hb_arrayGetNI( pArray, 1 );
+   rect.y = hb_arrayGetNI( pArray, 2 );
+   rect.w = hb_arrayGetNI( pArray, 3 );
+   rect.h = hb_arrayGetNI( pArray, 4 );
+
+   return rect;
+}
+
+PHB_ITEM __attribute__( ( unused ) ) hb_sdl_rect_return_array( const SDL_Rect *rect )
+{
+   PHB_ITEM pArray = hb_itemArrayNew( 4 );
+
+   hb_arraySetNI( pArray, 1, rect->x );
+   hb_arraySetNI( pArray, 2, rect->y );
+   hb_arraySetNI( pArray, 3, rect->w );
+   hb_arraySetNI( pArray, 4, rect->h );
+
+   return pArray;
+}
+
+/* -------------------------------------------------------------------------
 Harbour Implementation SDL_FRect
 ------------------------------------------------------------------------- */
 SDL_FRect hb_sdl_frect_param_array( PHB_ITEM pArray )
