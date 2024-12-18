@@ -4991,9 +4991,17 @@ HB_FUNC( SDL_RENDERDEBUGTEXT )
 
 }
 
+// bool SDL_RenderFillRect( SDL_Renderer *renderer, const SDL_FRect *rect );
 HB_FUNC( SDL_RENDERFILLRECT )
 {
-
+   if( hb_param( 1, HB_IT_NUMERIC ) != NULL )
+   {
+      hb_retnd( SDL_cos( hb_parnd( 1 ) ) );
+   }
+   else
+   {
+      HB_ERR_ARGS();
+   }
 }
 
 HB_FUNC( SDL_RENDERFILLRECTS )
