@@ -165,10 +165,10 @@ Structure APP
 // APP *AppUI( const char *title, int width, int height, SDL_Color bg )
 HB_FUNC( APPUI )
 {
-   PHB_ITEM pArray;
+   PHB_ITEM array;
 
    if( hb_param( 1, HB_IT_STRING ) != NULL && hb_param( 2, HB_IT_NUMERIC ) != NULL && hb_param( 3, HB_IT_NUMERIC ) != NULL &&
-      ( pArray = hb_param( 4, HB_IT_ARRAY ) ) != NULL && hb_arrayLen( pArray ) == 4 )
+      ( array = hb_param( 4, HB_IT_ARRAY ) ) != NULL && hb_arrayLen( array ) == 4 )
    {
       APP *app = hb_xgrab( sizeof( APP ) );
       if( !app )
@@ -181,7 +181,7 @@ HB_FUNC( APPUI )
       app->title  = hb_parc( 1 );
       app->width  = hb_parni( 2 );
       app->height = hb_parni( 3 );
-      app->bg     = hb_sdl_color_param_array( pArray );
+      app->bg     = hb_sdl_color_param_array( array );
 
       SDL_SetHint( SDL_HINT_SHUTDOWN_DBUS_ON_QUIT, "1" );
 
@@ -272,12 +272,12 @@ HB_FUNC( APPEXEC )
 // void AppSetBGColor( APP *app, SDL_Color bg )
 HB_FUNC( APPSETBGCOLOR )
 {
-   PHB_ITEM pArray;
+   PHB_ITEM array;
 
-   if( hb_param( 1, HB_IT_POINTER ) != NULL && ( pArray = hb_param( 2, HB_IT_ARRAY ) ) != NULL && hb_arrayLen( pArray ) == 4 )
+   if( hb_param( 1, HB_IT_POINTER ) != NULL && ( array = hb_param( 2, HB_IT_ARRAY ) ) != NULL && hb_arrayLen( array ) == 4 )
    {
       APP *app = hb_app_ParamPtr( 1 );
-      app->bg = hb_sdl_color_param_array( pArray );
+      app->bg = hb_sdl_color_param_array( array );
    }
    else
    {
@@ -420,12 +420,12 @@ Structure BoxUI
 // void BoxUI( APP *app, const char *title, SDL_Rect rect, SDL_Color bg )
 HB_FUNC( BOXUI )
 {
-   PHB_ITEM pArray1;
-   PHB_ITEM pArray2;
+   PHB_ITEM array1;
+   PHB_ITEM array2;
 
    if( hb_param( 1, HB_IT_POINTER ) != NULL && hb_param( 2, HB_IT_STRING ) != NULL &&
-     ( pArray1 = hb_param( 3, HB_IT_ARRAY ) ) != NULL && hb_arrayLen( pArray1 ) == 4 &&
-     ( pArray2 = hb_param( 4, HB_IT_ARRAY ) ) != NULL && hb_arrayLen( pArray2 ) == 4 )
+     ( array1 = hb_param( 3, HB_IT_ARRAY ) ) != NULL && hb_arrayLen( array1 ) == 4 &&
+     ( array2 = hb_param( 4, HB_IT_ARRAY ) ) != NULL && hb_arrayLen( array2 ) == 4 )
    {
       BoxUI *box = hb_xgrab( sizeof( BoxUI ) );
       if( !box )
@@ -437,8 +437,8 @@ HB_FUNC( BOXUI )
 
       APP *app   = hb_app_ParamPtr( 1 );
       box->title = hb_parc( 2 );
-      box->rect  = hb_sdl_frect_param_array( pArray1 );
-      box->bg    = hb_sdl_color_param_array( pArray2 );
+      box->rect  = hb_sdl_frect_param_array( array1 );
+      box->bg    = hb_sdl_color_param_array( array2 );
       box->next  = NULL;
 
       AppAddBox( app, box );
