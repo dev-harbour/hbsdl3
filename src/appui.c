@@ -157,8 +157,8 @@ void hb_app_Return( APP *pAPP )
 /* -------------------------------------------------------------------------
 Structure APP
 ------------------------------------------------------------------------- */
-// APP *App( const char *title, int width, int height, SDL_Color bg )
-HB_FUNC( APP )
+// APP *AppUI( const char *title, int width, int height, SDL_Color bg )
+HB_FUNC( APPUI )
 {
    PHB_ITEM pArray;
 
@@ -335,8 +335,8 @@ static void AppClearComponents( APP *app )
 /* -------------------------------------------------------------------------
 Structure BoxUI
 ------------------------------------------------------------------------- */
-// void Box( APP *app, const char *title, SDL_Rect rect, SDL_Color bg )
-HB_FUNC( BOX )
+// void BoxUI( APP *app, const char *title, SDL_Rect rect, SDL_Color bg )
+HB_FUNC( BOXUI )
 {
    PHB_ITEM pArray1;
    PHB_ITEM pArray2;
