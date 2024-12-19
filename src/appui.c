@@ -1,3 +1,7 @@
+/*
+ * Copyright 2024 Rafał Jopek <https://harbour.pl>
+ */
+
 #include "hbsdl3.h"
 
 typedef enum _ComponentType ComponentType;
@@ -82,7 +86,7 @@ static HB_GARBAGE_FUNC( hb_app_Destructor )
          SDL_QuitSubSystem( sdlFlags[ i ] );
       }
    }
-   
+
    TTF_Quit();
    SDL_Quit();
 }
