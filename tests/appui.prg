@@ -6,17 +6,17 @@
 
 PROCEDURE Main()
 
-   LOCAL app
+   LOCAL pApp
 
-   app := App( "Simple AppUI", 800, 600, WHITE )
+   pApp := AppUI( "Simple AppUI", 800, 600, WHITE )
 
-   Box( app, "First window",  { 100, 100, 200, 200 }, BLACK )
-   Box( app, "Second window", { 150, 150, 200, 200 }, BLUE )
-   Box( app, "Third window",  { 200, 200, 200, 200 }, GREEN )
-   Box( app, "Fourth window", { 250, 250, 200, 200 }, CYAN )
-   Box( app, "Fifth window",  { 300, 300, 200, 200 }, RED )
-   Box( app, "Sixth window",  { 350, 350, 200, 200 }, MAGENTA )
+   BoxUI( pApp, "First window",  { 100, 100, 200, 200 }, BLACK )
+   BoxUI( pApp, "Second window", { 150, 150, 200, 200 }, BLUE )
+   BoxUI( pApp, "Third window",  { 200, 200, 200, 200 }, GREEN )
+   BoxUI( pApp, "Fourth window", { 250, 250, 200, 200 }, CYAN )
+   BoxUI( pApp, "Fifth window",  { 300, 300, 200, 200 }, RED )
+   BoxUI( pApp, "Sixth window",  { 350, 350, 200, 200 }, MAGENTA )
 
-   AppExec( app )
+   AppExec( pApp )
 
 RETURN
