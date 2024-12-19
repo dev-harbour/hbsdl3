@@ -61,6 +61,8 @@ extern HB_EXPORT PHB_ITEM   hb_sdl_color_return_array( const SDL_Color *color );
 extern HB_EXPORT SDL_FColor hb_sdl_fcolor_param_array( PHB_ITEM pArray );
 extern HB_EXPORT PHB_ITEM   hb_sdl_fcolor_return_array( const SDL_FColor *fcolor );
 
+extern HB_EXPORT SDL_Rect  hb_sdl_rect_param_array( PHB_ITEM pArray );
+extern HB_EXPORT PHB_ITEM  hb_sdl_rect_return_array( const SDL_Rect *rect );
 extern HB_EXPORT SDL_FRect hb_sdl_frect_param_array( PHB_ITEM pArray );
 extern HB_EXPORT PHB_ITEM  hb_sdl_frect_return_array( const SDL_FRect *frect );
 
