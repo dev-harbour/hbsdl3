@@ -3,6 +3,7 @@
  */
 
 #include "hbsdl3.h"
+#include "hbvm.h"
 
 typedef enum _ComponentType ComponentType;
 
@@ -32,6 +33,7 @@ struct _APP
    int componentCount;
 
    PHB_ITEM keyBindings;
+   bool quit;
 };
 
 struct _BoxUI
@@ -45,6 +47,7 @@ struct _BoxUI
 static void AppAddBox( APP *app, BoxUI *newBox );
 static void AppDrawComponents( APP *app );
 static void AppClearComponents( APP *app );
+static void AppHandleKeyEvents( APP *app, SDL_Event *event );
 
 /* -------------------------------------------------------------------------
 Garbage Collector APP
@@ -57,7 +60,7 @@ static HB_GARBAGE_FUNC( hb_app_Destructor )
    {
       if( ( *ppAPP )->box != NULL )
       {
-         AppClearComponents( *ppAPP ); // Zwalniam wszystkie BoxUI
+         AppClearComponents( *ppAPP );
       }
 
       if( ( *ppAPP )->pWindow )
@@ -223,25 +226,30 @@ HB_FUNC( APPUI )
 // void AppExec( APP *app )
 HB_FUNC( APPEXEC )
 {
-   bool quit = F;
    SDL_Event event;
 
    if( hb_param( 1, HB_IT_POINTER ) != NULL )
    {
       APP *app = hb_app_ParamPtr( 1 );
+      app->quit = F;
 
-      while( !quit )
+      while( !app->quit )
       {
          while( SDL_PollEvent( &event ) )
          {
             switch( event.type )
             {
-            case SDL_EVENT_QUIT:
-               quit = T;
-               break;
-            case SDL_EVENT_WINDOW_CLOSE_REQUESTED:
-               quit = T;
-               break;
+               case SDL_EVENT_QUIT:
+                  app->quit = T;
+                  break;
+               case SDL_EVENT_WINDOW_CLOSE_REQUESTED:
+                  app->quit = T;
+                  break;
+               case SDL_EVENT_KEY_DOWN:
+                  AppHandleKeyEvents( app, &event );
+                  break;
+               default:
+                  break;
             }
          }
 
@@ -300,6 +308,19 @@ HB_FUNC( APPBINDKEY )
     }
 }
 
+HB_FUNC( APPQUIT )
+{
+   if( hb_param( 1, HB_IT_POINTER ) != NULL )
+   {
+      APP *app = hb_app_ParamPtr( 1 );
+      app->quit = T;
+   }
+   else
+   {
+      HB_ERR_ARGS();
+   }
+}
+
 /* -------------------------------------------------------------------------
 Static APP
 ------------------------------------------------------------------------- */
@@ -311,13 +332,12 @@ static void AppAddBox( APP *app, BoxUI *newBox )
    }
    else
    {
-      // Znajdź ostatni element
       BoxUI *current = app->box;
       while( current->next != NULL )
       {
          current = current->next;
       }
-      current->next = newBox;  // Nowy element na końcu
+      current->next = newBox;
    }
    app->componentCount++;
 }
@@ -331,13 +351,13 @@ static void AppDrawComponents( APP *app )
       SDL_SetRenderDrawColor( app->pRenderer, current->bg.r, current->bg.g, current->bg.b, current->bg.a );
       SDL_RenderFillRect( app->pRenderer, &current->rect );
 
-      current = current->next;  // Przejdź do następnego elementu
+      current = current->next;
    }
 }
 
 void AppRemoveBox( APP *app, BoxUI *boxToRemove )
 {
-   if( app->box == NULL ) // Lista jest pusta, nic do usunięcia
+   if( app->box == NULL )
       return;
 
    if( app->box == boxToRemove )
@@ -403,7 +423,7 @@ HB_FUNC( BOXUI )
       box->bg    = hb_sdl_color_param_array( pArray2 );
       box->next  = NULL;
 
-      AppAddBox( app, box );  // Dodaj do listy komponentów w APP
+      AppAddBox( app, box );
    }
    else
    {
