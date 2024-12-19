@@ -48,6 +48,9 @@ static void AppAddBox( APP *app, BoxUI *newBox );
 static void AppDrawComponents( APP *app );
 static void AppClearComponents( APP *app );
 static void AppHandleKeyEvents( APP *app, SDL_Event *event );
+static bool AppIsMouseInsideBox( int mouseX, int mouseY, SDL_FRect *rect );
+static void AppMoveBoxToFront( APP *app, BoxUI *box );
+static void AppHandleMouseEvents( APP *app, SDL_Event *event );
 
 /* -------------------------------------------------------------------------
 Garbage Collector APP
@@ -242,12 +245,19 @@ HB_FUNC( APPEXEC )
                case SDL_EVENT_QUIT:
                   app->quit = T;
                   break;
+
                case SDL_EVENT_WINDOW_CLOSE_REQUESTED:
                   app->quit = T;
                   break;
+
                case SDL_EVENT_KEY_DOWN:
                   AppHandleKeyEvents( app, &event );
                   break;
+
+               case SDL_EVENT_MOUSE_BUTTON_DOWN:
+                  AppHandleMouseEvents( app, &event );
+                  break;
+
                default:
                   break;
             }
@@ -285,7 +295,7 @@ HB_FUNC( APPSETBGCOLOR )
    }
 }
 
-// void AppBindKey( APP *app, const char *key, { || AppQuit() } )
+// void AppBindKey( APP *app, const char *key, void ( *onKeyPress ) ( void ) );
 HB_FUNC( APPBINDKEY )
 {
    if( hb_param( 1, HB_IT_POINTER ) != NULL && hb_param( 2, HB_IT_STRING ) != NULL && hb_param( 3, HB_IT_BLOCK ) != NULL )
@@ -299,7 +309,6 @@ HB_FUNC( APPBINDKEY )
          app->keyBindings = hb_hashNew( NULL );
       }
 
-      // Klucz i blok kodu do HASH
       hb_hashAdd( app->keyBindings, hb_itemPutC( NULL, key ), block );
     }
     else
@@ -342,18 +351,6 @@ static void AppAddBox( APP *app, BoxUI *newBox )
    app->componentCount++;
 }
 
-static void AppDrawComponents( APP *app )
-{
-   BoxUI *current = app->box;
-
-   while( current != NULL )
-   {
-      SDL_SetRenderDrawColor( app->pRenderer, current->bg.r, current->bg.g, current->bg.b, current->bg.a );
-      SDL_RenderFillRect( app->pRenderer, &current->rect );
-
-      current = current->next;
-   }
-}
 
 void AppRemoveBox( APP *app, BoxUI *boxToRemove )
 {
@@ -412,6 +409,75 @@ static void AppHandleKeyEvents( APP *app, SDL_Event *event )
          }
       }
    }
+}
+
+static bool AppIsMouseInsideBox( int mouseX, int mouseY, SDL_FRect *rect )
+{
+   return mouseX >= rect->x && mouseX <= rect->x + rect->w && mouseY >= rect->y && mouseY <= rect->y + rect->h;
+}
+
+static void AppMoveBoxToFront(APP *app, BoxUI *box)
+{
+    printf("Moving box to front: %s\n", box->title);
+
+    if (app->box == box)
+    {
+        printf("Box already at the front: %s\n", box->title);
+        return;
+    }
+
+    BoxUI *current = app->box;
+    BoxUI *previous = NULL;
+
+    while (current != NULL && current != box)
+    {
+        previous = current;
+        current = current->next;
+    }
+
+    if (current == NULL)
+    {
+        printf("Box not found in the list: %s\n", box->title);
+        return;
+    }
+
+    if (previous != NULL)
+    {
+        previous->next = current->next;
+    }
+
+    current->next = app->box;
+    app->box = current;
+
+    printf("Box moved to front: %s\n", box->title);
+}
+
+static void AppHandleMouseEvents(APP *app, SDL_Event *event)
+{
+    if (event->type == SDL_EVENT_MOUSE_BUTTON_DOWN)
+    {
+        int mouseX = event->button.x;
+        int mouseY = event->button.y;
+        printf("Mouse Clicked at: %d, %d\n", mouseX, mouseY);
+
+        BoxUI *current = app->box;
+
+        while (current != NULL)
+        {
+            printf("Checking box: %s at (%f, %f, %f, %f)\n",
+                   current->title,
+                   current->rect.x, current->rect.y,
+                   current->rect.w, current->rect.h);
+
+            if (AppIsMouseInsideBox(mouseX, mouseY, &current->rect))
+            {
+                printf("Clicked box: %s\n", current->title);
+                AppMoveBoxToFront(app, current);
+                break;
+            }
+            current = current->next;
+        }
+    }
 }
 
 /* -------------------------------------------------------------------------
