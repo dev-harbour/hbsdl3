@@ -351,6 +351,26 @@ static void AppAddBox( APP *app, BoxUI *newBox )
    app->componentCount++;
 }
 
+static void AppDrawComponents( APP *app )
+{
+   BoxUI *stack[ 100 ];
+   int count = 0;
+
+   BoxUI *current = app->box;
+
+   while( current != NULL && count < 100 )
+   {
+      stack[count++] = current;
+      current = current->next;
+   }
+
+   for( int i = count - 1; i >= 0; i-- )
+   {
+      current = stack[i];
+      SDL_SetRenderDrawColor( app->pRenderer, current->bg.r, current->bg.g, current->bg.b, current->bg.a );
+      SDL_RenderFillRect( app->pRenderer, &current->rect );
+   }
+}
 
 void AppRemoveBox( APP *app, BoxUI *boxToRemove )
 {
@@ -398,7 +418,7 @@ static void AppHandleKeyEvents( APP *app, SDL_Event *event )
    if( event->type == SDL_EVENT_KEY_DOWN )
    {
       const char *key = SDL_GetScancodeName( event->key.scancode );
-      printf( "%s\n", key );
+      // printf( "%s\n", key );
       if( app->keyBindings )
       {
          PHB_ITEM block = hb_hashGetCItemPtr( app->keyBindings, key );
@@ -416,68 +436,55 @@ static bool AppIsMouseInsideBox( int mouseX, int mouseY, SDL_FRect *rect )
    return mouseX >= rect->x && mouseX <= rect->x + rect->w && mouseY >= rect->y && mouseY <= rect->y + rect->h;
 }
 
-static void AppMoveBoxToFront(APP *app, BoxUI *box)
+static void AppMoveBoxToFront( APP *app, BoxUI *box )
 {
-    printf("Moving box to front: %s\n", box->title);
+   if( app->box == box )
+   {
+      return;
+   }
 
-    if (app->box == box)
-    {
-        printf("Box already at the front: %s\n", box->title);
-        return;
-    }
+   BoxUI *current = app->box;
+   BoxUI *previous = NULL;
 
-    BoxUI *current = app->box;
-    BoxUI *previous = NULL;
+   while( current != NULL && current != box )
+   {
+      previous = current;
+      current = current->next;
+   }
 
-    while (current != NULL && current != box)
-    {
-        previous = current;
-        current = current->next;
-    }
+   if( current == NULL )
+   {
+      return;
+   }
 
-    if (current == NULL)
-    {
-        printf("Box not found in the list: %s\n", box->title);
-        return;
-    }
+   if( previous != NULL )
+   {
+      previous->next = current->next;
+   }
 
-    if (previous != NULL)
-    {
-        previous->next = current->next;
-    }
-
-    current->next = app->box;
-    app->box = current;
-
-    printf("Box moved to front: %s\n", box->title);
+   current->next = app->box;
+   app->box = current;
 }
 
-static void AppHandleMouseEvents(APP *app, SDL_Event *event)
+static void AppHandleMouseEvents( APP *app, SDL_Event *event )
 {
-    if (event->type == SDL_EVENT_MOUSE_BUTTON_DOWN)
-    {
-        int mouseX = event->button.x;
-        int mouseY = event->button.y;
-        printf("Mouse Clicked at: %d, %d\n", mouseX, mouseY);
+   if( event->type == SDL_EVENT_MOUSE_BUTTON_DOWN )
+   {
+      int mouseX = event->button.x;
+      int mouseY = event->button.y;
 
-        BoxUI *current = app->box;
+      BoxUI *current = app->box;
 
-        while (current != NULL)
-        {
-            printf("Checking box: %s at (%f, %f, %f, %f)\n",
-                   current->title,
-                   current->rect.x, current->rect.y,
-                   current->rect.w, current->rect.h);
-
-            if (AppIsMouseInsideBox(mouseX, mouseY, &current->rect))
-            {
-                printf("Clicked box: %s\n", current->title);
-                AppMoveBoxToFront(app, current);
-                break;
-            }
-            current = current->next;
-        }
-    }
+      while( current != NULL )
+      {
+         if( AppIsMouseInsideBox( mouseX, mouseY, &current->rect ) )
+         {
+            AppMoveBoxToFront( app, current );
+            break;
+         }
+         current = current->next;
+      }
+   }
 }
 
 /* -------------------------------------------------------------------------
