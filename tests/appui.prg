@@ -17,6 +17,8 @@ PROCEDURE Main()
    BoxUI( pApp, "Fifth window",  { 300, 300, 200, 200 }, RED )
    BoxUI( pApp, "Sixth window",  { 350, 350, 200, 200 }, MAGENTA )
 
+   AppBindKey( pApp, "Escape", { || AppQuit( pApp ) } )
+
    AppExec( pApp )
 
 RETURN
