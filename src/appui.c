@@ -30,6 +30,8 @@ struct _APP
       BoxUI *box;
    };
    int componentCount;
+
+   PHB_ITEM keyBindings;
 };
 
 struct _BoxUI
@@ -55,7 +57,7 @@ static HB_GARBAGE_FUNC( hb_app_Destructor )
    {
       if( ( *ppAPP )->box != NULL )
       {
-         AppClearComponents( *ppAPP ); // Zwalniamy wszystkie BoxUI
+         AppClearComponents( *ppAPP ); // Zwalniam wszystkie BoxUI
       }
 
       if( ( *ppAPP )->pWindow )
@@ -259,6 +261,48 @@ HB_FUNC( APPEXEC )
    }
 }
 
+// void AppSetBGColor( APP *app, SDL_Color bg )
+HB_FUNC( APPSETBGCOLOR )
+{
+   PHB_ITEM pArray;
+
+   if( hb_param( 1, HB_IT_POINTER ) != NULL && ( pArray = hb_param( 2, HB_IT_ARRAY ) ) != NULL && hb_arrayLen( pArray ) == 4 )
+   {
+      APP *app = hb_app_ParamPtr( 1 );
+      app->bg = hb_sdl_color_param_array( pArray );
+   }
+   else
+   {
+      HB_ERR_ARGS();
+   }
+}
+
+// void AppBindKey( APP *app, const char *key, { || AppQuit() } )
+HB_FUNC( APPBINDKEY )
+{
+   if( hb_param( 1, HB_IT_POINTER ) != NULL && hb_param( 2, HB_IT_STRING ) != NULL && hb_param( 3, HB_IT_BLOCK ) != NULL )
+   {
+      APP *app = hb_app_ParamPtr( 1 );
+      const char *key = hb_parc( 2 );
+      PHB_ITEM block = hb_param( 3, HB_IT_BLOCK );
+
+      if( app->keyBindings == NULL )
+      {
+         app->keyBindings = hb_hashNew( NULL );
+      }
+
+      // Klucz i blok kodu do HASH
+      hb_hashAdd( app->keyBindings, hb_itemPutC( NULL, key ), block );
+    }
+    else
+    {
+        HB_ERR_ARGS();
+    }
+}
+
+/* -------------------------------------------------------------------------
+Static APP
+------------------------------------------------------------------------- */
 static void AppAddBox( APP *app, BoxUI *newBox )
 {
    if( app->box == NULL )
@@ -273,7 +317,7 @@ static void AppAddBox( APP *app, BoxUI *newBox )
       {
          current = current->next;
       }
-      current->next = newBox;  // Dodaj nowy element na końcu
+      current->next = newBox;  // Nowy element na końcu
    }
    app->componentCount++;
 }
