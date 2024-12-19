@@ -396,6 +396,24 @@ static void AppClearComponents( APP *app )
    app->componentCount = 0;
 }
 
+static void AppHandleKeyEvents( APP *app, SDL_Event *event )
+{
+   if( event->type == SDL_EVENT_KEY_DOWN )
+   {
+      const char *key = SDL_GetScancodeName( event->key.scancode );
+      printf( "%s\n", key );
+      if( app->keyBindings )
+      {
+         PHB_ITEM block = hb_hashGetCItemPtr( app->keyBindings, key );
+         if( block && hb_vmRequestReenter() )
+         {
+            hb_vmEvalBlock( block );
+            hb_vmRequestRestore();
+         }
+      }
+   }
+}
+
 /* -------------------------------------------------------------------------
 Structure BoxUI
 ------------------------------------------------------------------------- */
