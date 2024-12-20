@@ -2,7 +2,6 @@
 *.bak
 *.exe
 *.hbx
-#*.supp
 build
 lib
 tmp
