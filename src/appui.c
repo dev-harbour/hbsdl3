@@ -13,7 +13,7 @@ enum _ComponentType
    BUTTON
 };
 
-typedef struct _APP APP;
+typedef struct _APP   APP;
 typedef struct _BoxUI BoxUI;
 
 struct _APP
