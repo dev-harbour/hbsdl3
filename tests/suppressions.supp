@@ -1,3 +1,4 @@
+# valgrind --leak-check=full --suppressions=suppressions.supp ./appui
 {
    dbus_memory_leak
    Memcheck:Leak
