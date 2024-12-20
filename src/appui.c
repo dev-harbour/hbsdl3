@@ -39,7 +39,7 @@ struct _APP
 struct _BoxUI
 {
    const char *title;
-   SDL_FRect   rect;
+   SDL_FRect   frect;
    SDL_Color   bg;
    BoxUI      *next;
 };
@@ -48,7 +48,7 @@ static void app_add_box( APP *app, BoxUI *newBox );
 static void app_draw_components( APP *app );
 static void app_clear_components( APP *app );
 static void app_handle_key_events( APP *app, SDL_Event *event );
-static bool app_ismouse_inside_box( int mouseX, int mouseY, SDL_FRect *rect );
+static bool app_ismouse_inside_box( int mouseX, int mouseY, SDL_FRect *frect );
 static void app_move_box_to_front( APP *app, BoxUI *box );
 static void app_handle_mouse_events( APP *app, SDL_Event *event );
 
@@ -368,7 +368,7 @@ static void app_draw_components( APP *app )
    {
       current = stack[ i ];
       SDL_SetRenderDrawColor( app->pRenderer, current->bg.r, current->bg.g, current->bg.b, current->bg.a );
-      SDL_RenderFillRect( app->pRenderer, &current->rect );
+      SDL_RenderFillRect( app->pRenderer, &current->frect );
    }
 }
 
@@ -431,9 +431,9 @@ static void app_handle_key_events( APP *app, SDL_Event *event )
    }
 }
 
-static bool app_ismouse_inside_box( int mouseX, int mouseY, SDL_FRect *rect )
+static bool app_ismouse_inside_box( int mouseX, int mouseY, SDL_FRect *frect )
 {
-   return mouseX >= rect->x && mouseX <= rect->x + rect->w && mouseY >= rect->y && mouseY <= rect->y + rect->h;
+   return mouseX >= frect->x && mouseX <= frect->x + frect->w && mouseY >= frect->y && mouseY <= frect->y + frect->h;
 }
 
 static void app_move_box_to_front( APP *app, BoxUI *box )
@@ -477,7 +477,7 @@ static void app_handle_mouse_events( APP *app, SDL_Event *event )
 
       while( current != NULL )
       {
-         if( app_ismouse_inside_box( mouseX, mouseY, &current->rect ) )
+         if( app_ismouse_inside_box( mouseX, mouseY, &current->frect ) )
          {
             app_move_box_to_front( app, current );
             break;
@@ -490,7 +490,7 @@ static void app_handle_mouse_events( APP *app, SDL_Event *event )
 /* -------------------------------------------------------------------------
 Structure BoxUI
 ------------------------------------------------------------------------- */
-// void BoxUI( APP *app, const char *title, SDL_Rect rect, SDL_Color bg )
+// void BoxUI( APP *app, const char *title, SDL_FRect frect, SDL_Color bg )
 HB_FUNC( BOXUI )
 {
    PHB_ITEM array1;
@@ -510,7 +510,7 @@ HB_FUNC( BOXUI )
 
       APP *app   = hb_app_ParamPtr( 1 );
       box->title = hb_parc( 2 );
-      box->rect  = hb_sdl_frect_param_array( array1 );
+      box->frect = hb_sdl_frect_param_array( array1 );
       box->bg    = hb_sdl_color_param_array( array2 );
       box->next  = NULL;
 
