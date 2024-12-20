@@ -44,13 +44,13 @@ struct _BoxUI
    BoxUI      *next;
 };
 
-static void AppAddBox( APP *app, BoxUI *newBox );
-static void AppDrawComponents( APP *app );
-static void AppClearComponents( APP *app );
-static void AppHandleKeyEvents( APP *app, SDL_Event *event );
-static bool AppIsMouseInsideBox( int mouseX, int mouseY, SDL_FRect *rect );
-static void AppMoveBoxToFront( APP *app, BoxUI *box );
-static void AppHandleMouseEvents( APP *app, SDL_Event *event );
+static void app_add_box( APP *app, BoxUI *newBox );
+static void app_draw_components( APP *app );
+static void app_clear_components( APP *app );
+static void app_handle_key_events( APP *app, SDL_Event *event );
+static bool app_ismouse_inside_box( int mouseX, int mouseY, SDL_FRect *rect );
+static void app_move_box_to_front( APP *app, BoxUI *box );
+static void app_handle_mouse_events( APP *app, SDL_Event *event );
 
 /* -------------------------------------------------------------------------
 Garbage Collector APP
@@ -63,7 +63,7 @@ static HB_GARBAGE_FUNC( hb_app_Destructor )
    {
       if( ( *ppAPP )->box != NULL )
       {
-         AppClearComponents( *ppAPP );
+         app_clear_components( *ppAPP );
       }
 
       if( ( *ppAPP )->pWindow )
@@ -251,11 +251,11 @@ HB_FUNC( APPEXEC )
                   break;
 
                case SDL_EVENT_KEY_DOWN:
-                  AppHandleKeyEvents( app, &event );
+                  app_handle_key_events( app, &event );
                   break;
 
                case SDL_EVENT_MOUSE_BUTTON_DOWN:
-                  AppHandleMouseEvents( app, &event );
+                  app_handle_mouse_events( app, &event );
                   break;
 
                default:
@@ -267,7 +267,7 @@ HB_FUNC( APPEXEC )
          SDL_RenderClear( app->pRenderer );
 
          //---
-         AppDrawComponents( app );
+         app_draw_components( app );
          //---
 
          SDL_RenderPresent( app->pRenderer );
@@ -310,11 +310,11 @@ HB_FUNC( APPBINDKEY )
       }
 
       hb_hashAdd( app->keyBindings, hb_itemPutC( NULL, key ), block );
-    }
-    else
-    {
-        HB_ERR_ARGS();
-    }
+   }
+   else
+   {
+      HB_ERR_ARGS();
+   }
 }
 
 HB_FUNC( APPQUIT )
@@ -333,7 +333,7 @@ HB_FUNC( APPQUIT )
 /* -------------------------------------------------------------------------
 Static APP
 ------------------------------------------------------------------------- */
-static void AppAddBox( APP *app, BoxUI *newBox )
+static void app_add_box( APP *app, BoxUI *newBox )
 {
    if( app->box == NULL )
    {
@@ -351,7 +351,7 @@ static void AppAddBox( APP *app, BoxUI *newBox )
    app->componentCount++;
 }
 
-static void AppDrawComponents( APP *app )
+static void app_draw_components( APP *app )
 {
    BoxUI *stack[ 100 ];
    int count = 0;
@@ -360,13 +360,13 @@ static void AppDrawComponents( APP *app )
 
    while( current != NULL && count < 100 )
    {
-      stack[count++] = current;
+      stack[ count++ ] = current;
       current = current->next;
    }
 
    for( int i = count - 1; i >= 0; i-- )
    {
-      current = stack[i];
+      current = stack[ i ];
       SDL_SetRenderDrawColor( app->pRenderer, current->bg.r, current->bg.g, current->bg.b, current->bg.a );
       SDL_RenderFillRect( app->pRenderer, &current->rect );
    }
@@ -400,7 +400,7 @@ void AppRemoveBox( APP *app, BoxUI *boxToRemove )
    }
 }
 
-static void AppClearComponents( APP *app )
+static void app_clear_components( APP *app )
 {
    BoxUI *current = app->box;
    while( current != NULL )
@@ -413,7 +413,7 @@ static void AppClearComponents( APP *app )
    app->componentCount = 0;
 }
 
-static void AppHandleKeyEvents( APP *app, SDL_Event *event )
+static void app_handle_key_events( APP *app, SDL_Event *event )
 {
    if( event->type == SDL_EVENT_KEY_DOWN )
    {
@@ -431,12 +431,12 @@ static void AppHandleKeyEvents( APP *app, SDL_Event *event )
    }
 }
 
-static bool AppIsMouseInsideBox( int mouseX, int mouseY, SDL_FRect *rect )
+static bool app_ismouse_inside_box( int mouseX, int mouseY, SDL_FRect *rect )
 {
    return mouseX >= rect->x && mouseX <= rect->x + rect->w && mouseY >= rect->y && mouseY <= rect->y + rect->h;
 }
 
-static void AppMoveBoxToFront( APP *app, BoxUI *box )
+static void app_move_box_to_front( APP *app, BoxUI *box )
 {
    if( app->box == box )
    {
@@ -466,7 +466,7 @@ static void AppMoveBoxToFront( APP *app, BoxUI *box )
    app->box = current;
 }
 
-static void AppHandleMouseEvents( APP *app, SDL_Event *event )
+static void app_handle_mouse_events( APP *app, SDL_Event *event )
 {
    if( event->type == SDL_EVENT_MOUSE_BUTTON_DOWN )
    {
@@ -477,9 +477,9 @@ static void AppHandleMouseEvents( APP *app, SDL_Event *event )
 
       while( current != NULL )
       {
-         if( AppIsMouseInsideBox( mouseX, mouseY, &current->rect ) )
+         if( app_ismouse_inside_box( mouseX, mouseY, &current->rect ) )
          {
-            AppMoveBoxToFront( app, current );
+            app_move_box_to_front( app, current );
             break;
          }
          current = current->next;
@@ -514,7 +514,7 @@ HB_FUNC( BOXUI )
       box->bg    = hb_sdl_color_param_array( array2 );
       box->next  = NULL;
 
-      AppAddBox( app, box );
+      app_add_box( app, box );
    }
    else
    {
