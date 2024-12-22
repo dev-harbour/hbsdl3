@@ -2,6 +2,7 @@
 *.bak
 *.exe
 *.hbx
+*.log
 appui.c
 appui.ch
 appui.prg
