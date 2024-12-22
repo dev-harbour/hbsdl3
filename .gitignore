@@ -2,6 +2,9 @@
 *.bak
 *.exe
 *.hbx
+appui.c
+appui.ch
+appui.prg
 build
 lib
 tmp
