@@ -112,6 +112,13 @@ PHB_ITEM __attribute__( ( unused ) ) hb_sdl_frect_return_array( const SDL_FRect 
 /* -------------------------------------------------------------------------
 Harbour Implementation SDL_Event
 ------------------------------------------------------------------------- */
+HB_FUNC( SDL_EVENT )
+{
+   SDL_Event *pEvent = ( SDL_Event * ) hb_xgrab( sizeof( SDL_Event ) );
+   memset( pEvent, 0, sizeof( SDL_Event ) );
+   hb_sdl_event_Return( pEvent );
+}
+
 // int EventType( SDL_Event *pEvent ); /**< SDL_EVENT_KEY_DOWN or SDL_EVENT_KEY_UP */
 HB_FUNC( EVENTTYPE )
 {
