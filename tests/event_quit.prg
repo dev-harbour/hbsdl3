@@ -37,12 +37,10 @@ PROCEDURE Main()
       WHILE( !lQuit )
          BEGIN SEQUENCE
             WHILE( SDL_PollEvent( @pEvent ) )
-               WHILE( SDL_PollEvent( @pEvent ) )
-                  IF( EventType( pEvent ) == SDL_EVENT_QUIT )
-                     lQuit := T
-                     EXIT
-                  ENDIF
-               ENDDO
+               IF( EventType( pEvent ) == SDL_EVENT_QUIT )
+                  lQuit := T
+                  EXIT
+               ENDIF
             ENDDO
          RECOVER USING objLocal
             OutStd( "Błąd w obsłudze zdarzeń:", objLocal:description )
